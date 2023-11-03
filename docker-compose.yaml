@@ -1,0 +1,55 @@
+services:
+  user:
+    build:
+      context: .
+      dockerfile: ./apps/user/Dockerfile
+      target: development
+    command: npm run dev user
+    env_file:
+      - ./apps/user/.env
+    ports:
+      - '5000:5000'
+    volumes:
+      - .:/usr/src/app
+  highlight:
+    build:
+      context: .
+      dockerfile: ./apps/highlight/Dockerfile
+      target: development
+    command: npm run dev highlight
+    env_file:
+      - ./apps/highlight/.env
+    ports:
+      - '5001:5001'
+    volumes:
+      - .:/usr/src/app
+  game:
+    build:
+      context: .
+      dockerfile: ./apps/game/Dockerfile
+      target: development
+    command: npm run dev game
+    env_file:
+      - ./apps/game/.env
+    ports:
+      - '5002:5002'
+    volumes:
+      - .:/usr/src/app
+  category:
+    build:
+      context: .
+      dockerfile: ./apps/category/Dockerfile
+      target: development
+    command: npm run dev category
+    env_file:
+      - ./apps/category/.env
+    ports:
+      - '5003:5003'
+    volumes:
+      - .:/usr/src/app
+  mongo:
+    image: mongo
+  rabbitmq:
+    image: rabbitmq
+    ports:
+     - 5672:5672
