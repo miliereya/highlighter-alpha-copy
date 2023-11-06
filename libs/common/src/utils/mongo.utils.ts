@@ -1,11 +1,12 @@
 import { BadRequestException } from '@nestjs/common/exceptions'
 import { Types } from 'mongoose'
+import { InvalidIdException } from '../exceptions'
 
 export const parseToId = (value: string | number | Types.ObjectId) => {
 	try {
 		return new Types.ObjectId(value)
 	} catch (e) {
-		throw new BadRequestException('Invalid id format')
+		throw new BadRequestException(InvalidIdException())
 	}
 }
 

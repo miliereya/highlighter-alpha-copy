@@ -3,7 +3,7 @@ services:
     build:
       context: .
       dockerfile: ./apps/user/Dockerfile
-      target: development
+      target: production
     command: npm run dev user
     env_file:
       - ./apps/user/.env
@@ -15,7 +15,7 @@ services:
     build:
       context: .
       dockerfile: ./apps/highlight/Dockerfile
-      target: development
+      target: production
     command: npm run dev highlight
     env_file:
       - ./apps/highlight/.env
@@ -27,7 +27,7 @@ services:
     build:
       context: .
       dockerfile: ./apps/game/Dockerfile
-      target: development
+      target: production
     command: npm run dev game
     env_file:
       - ./apps/game/.env
@@ -39,7 +39,7 @@ services:
     build:
       context: .
       dockerfile: ./apps/category/Dockerfile
-      target: development
+      target: production
     command: npm run dev category
     env_file:
       - ./apps/category/.env

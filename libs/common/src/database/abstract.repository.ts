@@ -10,6 +10,10 @@ import {
 } from 'mongoose'
 import { AbstractDocument } from './abstract.schema'
 import { capitalizeAndSingularize } from '../utils'
+import {
+	DocumentNotFoundException,
+	DuplicateFieldException,
+} from '../exceptions'
 
 export abstract class AbstractRepository<TDocument extends AbstractDocument> {
 	protected abstract readonly logger: Logger
@@ -39,9 +43,7 @@ export abstract class AbstractRepository<TDocument extends AbstractDocument> {
 
 		if (!documents[0]) {
 			throw new NotFoundException(
-				`${capitalizeAndSingularize(
-					this.model.collection.collectionName
-				)} was not found`
+				DocumentNotFoundException(this.model.collection.collectionName)
 			)
 		}
 
@@ -62,11 +64,10 @@ export abstract class AbstractRepository<TDocument extends AbstractDocument> {
 		} catch (e) {
 			if (e.code === 11000) {
 				throw new BadRequestException(
-					`Duplicate value in field '${
-						e.message.split('{ ').pop().split(':')[0]
-					}' in ${capitalizeAndSingularize(
+					DuplicateFieldException(
+						e.message.split('{ ').pop().split(':')[0],
 						this.model.collection.collectionName
-					)} model`
+					)
 				)
 			}
 		}

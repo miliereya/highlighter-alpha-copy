@@ -1,7 +1,13 @@
 import { Module } from '@nestjs/common'
 import { UserController } from './user.controller'
 import { UserService } from './user.service'
-import { DatabaseModule, LoggerModule, User, UserSchema } from '@app/common'
+import {
+	DatabaseModule,
+	HealthModule,
+	LoggerModule,
+	User,
+	UserSchema,
+} from '@app/common'
 import { ConfigModule, ConfigService } from '@nestjs/config'
 import * as Joi from 'joi'
 import { UserRepository } from './user.repository'
@@ -33,6 +39,7 @@ import { LocalStrategy } from './strategies/local.strategy'
 			}),
 			inject: [ConfigService],
 		}),
+		HealthModule,
 	],
 	controllers: [UserController],
 	providers: [UserService, UserRepository, LocalStrategy, JwtStrategy],

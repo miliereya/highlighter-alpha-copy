@@ -1,0 +1,38 @@
+services:
+  e2e:
+    build:
+      dockerfile: ./Dockerfile
+    volumes:
+      - .:/usr/src/app
+    depends_on:
+      - user
+      - category
+      - game
+      - highlight
+      - mongo
+  user:
+    image: highlighter-server-user
+    env_file:
+      - ../apps/user/.env
+    ports:
+      - '5000:5000'
+  highlight:
+    image: highlighter-server-highlight
+    env_file:
+      - ../apps/highlight/.env
+    ports:
+      - '5001:5001'
+  game:
+    image: highlighter-server-game
+    env_file:
+      - ../apps/game/.env
+    ports:
+      - '5002:5002'
+  category:
+    image: highlighter-server-category
+    env_file:
+      - ../apps/category/.env
+    ports:
+      - '5003:5003'
+  mongo:
+    image: mongo
