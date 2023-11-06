@@ -14,7 +14,9 @@ import { CreateCategoryDto, UpdateCategoryDto } from './dto'
 import { MessagePattern, Payload } from '@nestjs/microservices'
 import {
 	ApiException,
+	CATEGORY_EXAMPLE,
 	CATEGORY_MESSAGE_PATTERNS,
+	Category,
 	DocumentNotFoundException,
 	DuplicateFieldException,
 	InvalidIdException,
@@ -28,8 +30,6 @@ import {
 	ApiParam,
 	ApiTags,
 } from '@nestjs/swagger'
-import { Category } from './models/category.schema'
-import { CATEGORY_EXAMPLE } from './constants'
 
 @ApiTags('Categories')
 @Controller('categories')

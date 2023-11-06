@@ -23,7 +23,6 @@ async function bootstrap() {
 	app.useLogger(app.get(Logger))
 	const config = new DocumentBuilder()
 		.setTitle('Highlighter Categories')
-		.setDescription('Categories microservice api')
 		.setVersion('1.0')
 		.build()
 	const document = SwaggerModule.createDocument(app, config)

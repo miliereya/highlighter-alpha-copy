@@ -1,6 +1,6 @@
+import { CATEGORY_EXAMPLE } from '@app/common'
 import { ApiProperty } from '@nestjs/swagger'
 import { IsArray, IsNotEmpty, IsString } from 'class-validator'
-import { CATEGORY_EXAMPLE } from '../constants'
 
 export class UpdateCategoryDto {
 	@ApiProperty({ type: String, example: CATEGORY_EXAMPLE.title })

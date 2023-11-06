@@ -1,8 +1,13 @@
 import { Module } from '@nestjs/common'
 import { HighlightController } from './highlight.controller'
 import { HighlightService } from './highlight.service'
-import { DatabaseModule, LoggerModule, USER_SERVICE } from '@app/common'
-import { Highlight, HighlightSchema } from './models/highlight.schema'
+import {
+	DatabaseModule,
+	Highlight,
+	HighlightSchema,
+	LoggerModule,
+	USER_SERVICE,
+} from '@app/common'
 import { ConfigModule, ConfigService } from '@nestjs/config'
 import * as Joi from 'joi'
 import { ClientsModule, Transport } from '@nestjs/microservices'

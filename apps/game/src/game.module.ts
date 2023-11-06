@@ -1,8 +1,13 @@
 import { Module } from '@nestjs/common'
 import { GameService } from './game.service'
 import { GameController } from './game.controller'
-import { CATEGORY_SERVICE, DatabaseModule, LoggerModule } from '@app/common'
-import { Game, GameSchema } from './models/game.schema'
+import {
+	CATEGORY_SERVICE,
+	DatabaseModule,
+	Game,
+	GameSchema,
+	LoggerModule,
+} from '@app/common'
 import { GameRepository } from './game.repository'
 import { ConfigModule, ConfigService } from '@nestjs/config'
 import * as Joi from 'joi'

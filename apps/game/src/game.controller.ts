@@ -46,7 +46,7 @@ export class GameController {
 	}
 
 	@Delete(':_id')
-	remove(@Param('_id') _id: string) {
+	delete(@Param('_id') _id: string) {
 		this.gameService.delete(_id)
 	}
 
