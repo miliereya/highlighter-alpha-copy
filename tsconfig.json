@@ -23,6 +23,12 @@
       ],
       "@app/common/*": [
         "libs/common/src/*"
+      ],
+      "@app/api": [
+        "libs/api/src"
+      ],
+      "@app/api/*": [
+        "libs/api/src/*"
       ]
     }
   }

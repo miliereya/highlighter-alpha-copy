@@ -13,11 +13,6 @@ export class UpdateCategoryDto {
 	@IsNotEmpty()
 	description: string
 
-	@ApiProperty({ type: String, example: CATEGORY_EXAMPLE.icon })
-	@IsString()
-	@IsNotEmpty()
-	icon: string
-
 	@ApiProperty({ type: [String], example: CATEGORY_EXAMPLE.games })
 	@IsArray()
 	games: string[]

@@ -17,14 +17,6 @@ export class CreateCategoryDto {
 	description: string
 
 	@ApiProperty({
-		type: String,
-		example: CATEGORY_EXAMPLE.icon,
-	})
-	@IsString()
-	@IsNotEmpty()
-	icon: string
-
-	@ApiProperty({
 		type: [String],
 		example: CATEGORY_EXAMPLE.games,
 	})

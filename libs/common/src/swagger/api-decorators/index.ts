@@ -1,0 +1,5 @@
+export * from './get-by-id.api-decorator'
+export * from './get-by-slug.api-decorator'
+export * from './create.api-decorator'
+export * from './patch.api-decorator'
+export * from './delete.api-decorator'

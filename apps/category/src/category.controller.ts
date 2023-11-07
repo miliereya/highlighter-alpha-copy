@@ -100,7 +100,7 @@ export class CategoryController {
 	// @ApiException(() => BadRequestException, {
 	// 	description: InvalidIdException(),
 	// })
-	async remove(@Param('_id') _id: string) {
+	async delete(@Param('_id') _id: string) {
 		await this.categoryService.delete(_id)
 	}
 
