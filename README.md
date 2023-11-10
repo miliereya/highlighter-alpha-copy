@@ -1,3 +1,11 @@
+# Table Of Contents
+
+- <a target="_blank" href="https://gitlab.com/miralis.io/highlighter-server/-/blob/main/.doc/dev-api.md">Development API</a>
+- <a href="https://gitlab.com/miralis.io/highlighter-server/-/blob/main/README.md#prerequisites">Prerequisites</a>
+- <a href="https://gitlab.com/miralis.io/highlighter-server/-/blob/main/README.md#required-extensions-vs-code">Required Extensions</a>
+- <a href="https://gitlab.com/miralis.io/highlighter-server/-/blob/main/README.md#gettings-started">Gettings Started</a>
+
+
 # Prerequisites
 
 - NodeJS https://nodejs.org/en/
