@@ -59,6 +59,18 @@ services:
       - '5004:5004'
     volumes:
       - .:/usr/src/app
+  admin:
+    build:
+      context: .
+      dockerfile: ./apps/admin/Dockerfile
+      target: development
+    command: npm run dev admin
+    env_file:
+      - ./apps/admin/.env
+    ports:
+      - '5005:5005'
+    volumes:
+      - .:/usr/src/app
   mongo:
     image: mongo
   rabbitmq:

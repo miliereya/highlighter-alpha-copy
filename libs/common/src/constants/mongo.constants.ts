@@ -6,4 +6,5 @@ export const MONGO_COLLECTIONS = {
 	COMMENTS: 'comments',
 	CHATS: 'chats',
 	MESSAGES: 'messages',
+	ADMINS: 'admins',
 }

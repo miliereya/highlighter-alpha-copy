@@ -9,8 +9,8 @@ export class HighlightRepository extends AbstractRepository<Highlight> {
 
 	constructor(
 		@InjectModel(Highlight.name)
-		reservationModel: Model<Highlight>
+		highlightModel: Model<Highlight>
 	) {
-		super(reservationModel)
+		super(highlightModel)
 	}
 }

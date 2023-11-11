@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common'
 import { GameService } from './game.service'
 import { GameController } from './game.controller'
 import {
+	ADMIN_SERVICE,
 	CATEGORY_SERVICE,
 	DatabaseModule,
 	Game,
@@ -22,6 +23,7 @@ import { ClientsModule, Transport } from '@nestjs/microservices'
 				MONGODB_URI: Joi.string().required(),
 				HTTP_PORT: Joi.number().required(),
 				CATEGORY_HOST: Joi.string().required(),
+				ADMIN_HOST: Joi.string().required(),
 			}),
 		}),
 		ClientsModule.registerAsync([
@@ -34,6 +36,17 @@ import { ClientsModule, Transport } from '@nestjs/microservices'
 						queue: configService.getOrThrow<string>(
 							'CATEGORY_HOST'
 						),
+					},
+				}),
+				inject: [ConfigService],
+			},
+			{
+				name: ADMIN_SERVICE,
+				useFactory: (configService: ConfigService) => ({
+					transport: Transport.RMQ,
+					options: {
+						urls: [configService.getOrThrow<string>('RMQ_URI')],
+						queue: configService.getOrThrow<string>('ADMIN_HOST'),
 					},
 				}),
 				inject: [ConfigService],

@@ -17,6 +17,7 @@ import {
 	ApiGetById,
 	ApiGetBySlug,
 	ApiPatch,
+	CreatorGuard,
 	GAME_EXAMPLE,
 	GAME_MESSAGE_PATTERNS,
 	Game,
@@ -25,36 +26,40 @@ import {
 import { ApiTags } from '@nestjs/swagger'
 import { ApiGetAll } from '@app/common/swagger/api-decorators/get-all.api-decorator'
 
-@ApiTags('Public')
 @Controller('games')
 export class GameController {
 	constructor(private readonly gameService: GameService) {}
 
 	@Post('create')
+	@CreatorGuard()
 	@ApiCreate({ document: Game.name, type: Game, duplicateFields: ['title'] })
 	create(@Body() createGameDto: CreateGameDto) {
 		return this.gameService.create(createGameDto)
 	}
 
 	@Get(':_id')
+	@ApiTags('Public')
 	@ApiGetById({ type: Game, document: Game.name })
 	getById(@Param('_id') _id: string) {
 		return this.gameService.findById(_id)
 	}
 
 	@Get('/by-slug/:slug')
+	@ApiTags('Public')
 	@ApiGetBySlug({ type: Game, document: Game.name, slug: GAME_EXAMPLE.slug })
 	getBySlug(@Param('slug') slug: string) {
 		return this.gameService.bySlug(slug)
 	}
 
 	@Get()
+	@ApiTags('Public')
 	@ApiGetAll({ type: Game })
 	getAll() {
 		return this.gameService.findAll()
 	}
 
 	@Patch('update/:_id')
+	@CreatorGuard()
 	@ApiPatch({ type: Game, document: Game.name, duplicateFields: ['title'] })
 	@HttpCode(200)
 	update(@Param('_id') _id: string, @Body() updateGameDto: UpdateGameDto) {
@@ -62,6 +67,7 @@ export class GameController {
 	}
 
 	@Delete(':_id')
+	@CreatorGuard()
 	@ApiDelete({ document: Game.name })
 	delete(@Param('_id') _id: string) {
 		this.gameService.delete(_id)

@@ -10,7 +10,8 @@ import {
 import { ClientProxy } from '@nestjs/microservices'
 import { Reflector } from '@nestjs/core'
 import { catchError, map, Observable, of, tap } from 'rxjs'
-import { USER_SERVICE } from '../constants'
+import { USER_MESSAGE_PATTERNS, USER_SERVICE } from '../constants'
+import { ApiJwt } from '../swagger'
 
 @Injectable()
 class JwtAuthGuard implements CanActivate {
@@ -31,7 +32,7 @@ class JwtAuthGuard implements CanActivate {
 			return false
 		}
 		return this.authClient
-			.send('authenticate', {
+			.send(USER_MESSAGE_PATTERNS.AUTHENTICATE, {
 				Authentication: jwt,
 			})
 			.pipe(
@@ -47,4 +48,4 @@ class JwtAuthGuard implements CanActivate {
 	}
 }
 
-export const Auth = () => applyDecorators(UseGuards(JwtAuthGuard))
+export const Auth = () => applyDecorators(UseGuards(JwtAuthGuard), ApiJwt())

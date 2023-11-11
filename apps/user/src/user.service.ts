@@ -1,7 +1,7 @@
 import {
+	BadRequestException,
 	Injectable,
 	UnauthorizedException,
-	UnprocessableEntityException,
 } from '@nestjs/common'
 import { UserRepository } from './user.repository'
 import { RegisterDto } from './dto'
@@ -129,7 +129,7 @@ export class UserService {
 		} catch (err) {
 			return
 		}
-		throw new UnprocessableEntityException('Email is already used.')
+		throw new BadRequestException('Email is already used.')
 	}
 
 	private async checkUsernameAvailability(username: string) {
@@ -140,6 +140,6 @@ export class UserService {
 		} catch (err) {
 			return
 		}
-		throw new UnprocessableEntityException('Username is already used.')
+		throw new BadRequestException('Username is already used.')
 	}
 }

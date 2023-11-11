@@ -12,11 +12,11 @@ import { UserService } from './user.service'
 import { RegisterDto } from './dto'
 import {
 	AddHighlightToUserPayload,
+	AuthPayload,
 	CurrentUser,
 	LikeHighlightToUserPayload,
 	USER_MESSAGE_PATTERNS,
 	User,
-	UserPrivate,
 } from '@app/common'
 import { Response } from 'express'
 import { JwtAuthGuard, LocalAuthGuard } from './guards'
@@ -59,7 +59,7 @@ export class UserController {
 
 	@UseGuards(JwtAuthGuard)
 	@MessagePattern(USER_MESSAGE_PATTERNS.AUTHENTICATE)
-	async authenticate(@Payload() data: { user: UserPrivate }) {
+	async authenticate(@Payload() data: AuthPayload) {
 		return data.user
 	}
 

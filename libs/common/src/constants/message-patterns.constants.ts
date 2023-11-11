@@ -5,6 +5,10 @@ export const enum USER_MESSAGE_PATTERNS {
 	LIKE_HIGHLIGHT = 'like_highlight',
 }
 
+export const enum ADMIN_MESSAGE_PATTERNS {
+	AUTHENTICATE = 'authenticate',
+}
+
 export const enum HIGHLIGHT_MESSAGE_PATTERNS {}
 
 export const enum CATEGORY_MESSAGE_PATTERNS {

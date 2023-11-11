@@ -9,8 +9,8 @@ export class UserRepository extends AbstractRepository<User> {
 
 	constructor(
 		@InjectModel(User.name)
-		reservationModel: Model<User>
+		userModel: Model<User>
 	) {
-		super(reservationModel)
+		super(userModel)
 	}
 }
