@@ -24,3 +24,8 @@
 ## File api
 
 - port 5004
+
+
+## Admin api
+
+- port 5005
