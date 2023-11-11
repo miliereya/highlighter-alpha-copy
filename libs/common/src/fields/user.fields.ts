@@ -4,15 +4,7 @@ export const userPublicFields = [
 	'subscribed',
 	'subscribers',
 	'friends',
-	'highlights',
-] as [
-	'username',
-	'avatar',
-	'subscribed',
-	'subscribers',
-	'friends',
-	'highlights',
-]
+] as ['username', 'avatar', 'subscribed', 'subscribers', 'friends']
 
 export const userPrivateFields = [
 	'username',

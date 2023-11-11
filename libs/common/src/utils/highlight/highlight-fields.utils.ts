@@ -8,9 +8,6 @@ import {
 export const highlightAggregatePreviewFields = (prefix = '') =>
 	getFieldsForAggregate(['_id', ...highlightPreviewFields], prefix)
 
-// export const highlightAggregatePrivateFields = (prefix = '') =>
-// 	getFieldsForAggregate(highlightPrivateFields, prefix)
-
 export const highlightPopulatePreviewFields = (prefix = '') =>
 	getFieldsForPopulate(highlightPreviewFields, prefix)
 

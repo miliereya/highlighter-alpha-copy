@@ -4,16 +4,17 @@ import {
 	UnauthorizedException,
 } from '@nestjs/common'
 import { UserRepository } from './user.repository'
-import { RegisterDto } from './dto'
+import { LoginDto, RegisterDto } from './dto'
 import * as bcrypt from 'bcryptjs'
 import { ConfigService } from '@nestjs/config'
 import { JwtService } from '@nestjs/jwt'
 import {
 	AddHighlightToUserPayload,
-	User,
 	parseToId,
 	highlightPreviewLookup,
 	LikeHighlightToUserPayload,
+	UserPublic,
+	UserPrivate,
 } from '@app/common'
 import { TokenPayload } from './interfaces'
 import { Response } from 'express'
@@ -40,9 +41,12 @@ export class UserService {
 		return user
 	}
 
-	async login(user: User, response: Response) {
+	async login(dto: LoginDto, response: Response) {
+		const verifiedUser = await this.verifyUser(dto)
+		const user = await this.getPrivateUser(verifiedUser._id)
+
 		const tokenPayload: TokenPayload = {
-			_id: user._id.toHexString(),
+			_id: verifiedUser._id.toHexString(),
 		}
 
 		const expires = new Date()
@@ -57,11 +61,11 @@ export class UserService {
 			expires,
 		})
 
-		return await this.getPrivateUser(user._id)
+		return user
 	}
 
 	async getPrivateUser(_id: Types.ObjectId) {
-		return this.userRepository.aggregateOne([
+		return this.userRepository.aggregateOne<UserPrivate>([
 			{ $match: { _id: parseToId(_id) } },
 			{
 				$lookup: highlightPreviewLookup(),
@@ -79,7 +83,7 @@ export class UserService {
 	}
 
 	async getProfile(_id: string) {
-		return this.userRepository.aggregateOne([
+		return this.userRepository.aggregateOne<UserPublic>([
 			{ $match: { _id: parseToId(_id) } },
 			{
 				$lookup: highlightPreviewLookup(),
@@ -94,7 +98,8 @@ export class UserService {
 		])
 	}
 
-	async verifyUser(email: string, password: string) {
+	async verifyUser(dto: LoginDto) {
+		const { email, password } = dto
 		const user = await this.userRepository.findOne({ email })
 		const passwordIsValid = await bcrypt.compare(password, user.password)
 		if (!passwordIsValid) {

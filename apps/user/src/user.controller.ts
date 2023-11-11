@@ -9,9 +9,12 @@ import {
 	UseGuards,
 } from '@nestjs/common'
 import { UserService } from './user.service'
-import { RegisterDto } from './dto'
+import { LoginDto, RegisterDto } from './dto'
 import {
 	AddHighlightToUserPayload,
+	ApiGetById,
+	ApiJwt,
+	ApiRegister,
 	AuthPayload,
 	CurrentUser,
 	LikeHighlightToUserPayload,
@@ -19,30 +22,35 @@ import {
 	User,
 } from '@app/common'
 import { Response } from 'express'
-import { JwtAuthGuard, LocalAuthGuard } from './guards'
+import { JwtAuthGuard } from './guards'
 import { MessagePattern, Payload } from '@nestjs/microservices'
+import { ApiTags } from '@nestjs/swagger'
 
 @Controller('users')
 export class UserController {
 	constructor(private readonly userService: UserService) {}
 
 	@Post('register')
+	@ApiTags('Public')
+	@ApiRegister()
 	async register(@Body() dto: RegisterDto) {
 		await this.userService.registerUser(dto)
 	}
 
-	@HttpCode(200)
-	@UseGuards(LocalAuthGuard)
 	@Post('login')
+	@ApiTags('Public')
+	@HttpCode(200)
 	async login(
-		@CurrentUser() user: User,
-		@Res({ passthrough: true }) response: Response
+		@Res({ passthrough: true }) response: Response,
+		@Body() dto: LoginDto
 	) {
-		const jwt = await this.userService.login(user, response)
-		response.send(jwt)
+		const userData = await this.userService.login(dto, response)
+		response.send(userData)
 	}
 
 	@UseGuards(JwtAuthGuard)
+	@ApiJwt()
+	@ApiTags('User')
 	@Get('refresh')
 	async refresh(
 		@CurrentUser() user: User,
@@ -53,6 +61,8 @@ export class UserController {
 	}
 
 	@Get('profile/:_id')
+	@ApiTags('Public')
+	@ApiGetById({ document: User.name, type: String })
 	async profile(@Param('_id') _id: string) {
 		return this.userService.getProfile(_id)
 	}

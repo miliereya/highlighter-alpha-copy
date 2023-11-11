@@ -32,14 +32,11 @@ export abstract class AbstractRepository<TDocument extends AbstractDocument> {
 		return documents
 	}
 
-	async aggregateOne(
+	async aggregateOne<T>(
 		pipelineStages: PipelineStage[],
 		options?: AggregateOptions
-	): Promise<TDocument> {
-		const documents = await this.model.aggregate<TDocument>(
-			pipelineStages,
-			options
-		)
+	): Promise<T> {
+		const documents = await this.model.aggregate<T>(pipelineStages, options)
 
 		if (!documents[0]) {
 			throw new NotFoundException(
