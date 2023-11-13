@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-types */
-import { ApiException } from '@app/common'
+import { ApiException } from '..'
 import { applyDecorators } from '@nestjs/common/decorators'
 import { ForbiddenException } from '@nestjs/common/exceptions'
 

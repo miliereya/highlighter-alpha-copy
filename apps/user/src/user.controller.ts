@@ -12,9 +12,6 @@ import { UserService } from './user.service'
 import { LoginDto, RegisterDto } from './dto'
 import {
 	AddHighlightToUserPayload,
-	ApiGetById,
-	ApiJwt,
-	ApiRegister,
 	AuthPayload,
 	CurrentUser,
 	LikeHighlightToUserPayload,
@@ -26,7 +23,7 @@ import { Response } from 'express'
 import { JwtAuthGuard } from './guards'
 import { MessagePattern, Payload } from '@nestjs/microservices'
 import { ApiTags } from '@nestjs/swagger'
-import { ApiLogin } from '@app/common/swagger/api-decorators/login.api-decorator'
+import { ApiGetById, ApiJwt, ApiLogin, ApiRegister } from '@app/api'
 
 @Controller('users')
 export class UserController {

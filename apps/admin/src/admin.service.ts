@@ -10,7 +10,7 @@ import {
 	AdminData,
 	adminFields,
 	adminRoles,
-	getFieldsForAggregate,
+	getFieldsForProject,
 	parseToId,
 } from '@app/common'
 import { Response } from 'express'
@@ -75,7 +75,7 @@ export class AdminService {
 		return this.adminRepository.aggregateOne([
 			{ $match: { _id: parseToId(_id) } },
 			{
-				$project: getFieldsForAggregate(adminFields),
+				$project: getFieldsForProject(adminFields),
 			},
 		])
 	}

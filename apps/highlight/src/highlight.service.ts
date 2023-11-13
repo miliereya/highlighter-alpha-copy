@@ -1,6 +1,7 @@
 import {
 	AddHighlightToUserPayload,
 	GetHighlightsPreviewsPayload,
+	HighlightPreview,
 	LikeHighlightToUserPayload,
 	TypeLikeAction,
 	USER_MESSAGE_PATTERNS,
@@ -15,7 +16,6 @@ import { ClientProxy } from '@nestjs/microservices'
 import { CreateHighlightDto } from './dto'
 import { HighlightRepository } from './highlight.repository'
 import { LikeHighlightDto } from './dto/like-highlight.dto'
-import { HighlightPreview } from '@app/common/types/highlight.types'
 
 @Injectable()
 export class HighlightService {

@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/ban-types */
-import { ApiException } from '@app/common'
 import { applyDecorators } from '@nestjs/common/decorators'
 import { UnauthorizedException } from '@nestjs/common/exceptions'
 import { Type } from '@nestjs/common/interfaces'
 import { ApiOkResponse } from '@nestjs/swagger'
+import { ApiException } from '../exceptions'
 
 interface ApiLoginOptions {
 	type?: Type<unknown> | Function | [Function] | string

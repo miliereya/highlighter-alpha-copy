@@ -8,18 +8,16 @@ import {
 	applyDecorators,
 } from '@nestjs/common'
 import { ClientProxy } from '@nestjs/microservices'
-import { Reflector } from '@nestjs/core'
 import { catchError, map, Observable, of, tap } from 'rxjs'
 import { USER_MESSAGE_PATTERNS, USER_SERVICE } from '../constants'
-import { ApiJwt } from '../swagger'
+import { ApiJwt } from '@app/api'
 
 @Injectable()
 class JwtAuthGuard implements CanActivate {
 	private readonly logger = new Logger(JwtAuthGuard.name)
 
 	constructor(
-		@Inject(USER_SERVICE) private readonly authClient: ClientProxy,
-		private readonly reflector: Reflector
+		@Inject(USER_SERVICE) private readonly authClient: ClientProxy
 	) {}
 
 	canActivate(

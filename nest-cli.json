@@ -79,6 +79,15 @@
       "compilerOptions": {
         "tsConfigPath": "apps/admin/tsconfig.app.json"
       }
+    },
+    "amazon-s3": {
+      "type": "library",
+      "root": "libs/amazon-s3",
+      "entryFile": "index",
+      "sourceRoot": "libs/amazon-s3/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/amazon-s3/tsconfig.lib.json"
+      }
     }
   }
 }

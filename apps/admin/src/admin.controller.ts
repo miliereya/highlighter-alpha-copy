@@ -14,11 +14,11 @@ import {
 	ADMIN_MESSAGE_PATTERNS,
 	AdminAuthPayload,
 	AdminData,
+	CurrentAdmin,
 	OwnerGuard,
 } from '@app/common'
 import { Response } from 'express'
 import { RegisterDto } from './dto'
-import { CurrentAdmin } from '@app/common/decorators/admin.decorator'
 
 @Controller('admins')
 export class AdminController {

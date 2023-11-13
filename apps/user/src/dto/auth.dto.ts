@@ -1,4 +1,4 @@
-import { USER_EXAMPLE } from '@app/common'
+import { USER_EXAMPLE } from '@app/api'
 import { ApiProperty } from '@nestjs/swagger'
 import { IsEmail, IsString, MaxLength, MinLength } from 'class-validator'
 

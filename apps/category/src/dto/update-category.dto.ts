@@ -1,4 +1,4 @@
-import { CATEGORY_EXAMPLE } from '@app/common'
+import { CATEGORY_EXAMPLE } from '@app/api'
 import { ApiProperty } from '@nestjs/swagger'
 import { IsArray, IsNotEmpty, IsString } from 'class-validator'
 

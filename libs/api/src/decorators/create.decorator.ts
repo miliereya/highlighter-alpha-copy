@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-types */
-import { ApiException, DuplicateFieldException } from '@app/common'
+import { ApiException, DuplicateFieldException } from '..'
 import { applyDecorators } from '@nestjs/common/decorators'
 import { BadRequestException } from '@nestjs/common/exceptions'
 import { Type } from '@nestjs/common/interfaces'

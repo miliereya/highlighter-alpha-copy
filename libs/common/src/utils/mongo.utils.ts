@@ -1,6 +1,6 @@
+import { InvalidIdException } from '@app/api'
 import { BadRequestException } from '@nestjs/common/exceptions'
 import { Types } from 'mongoose'
-import { InvalidIdException } from '../exceptions'
 
 export const parseToId = (value: string | number | Types.ObjectId) => {
 	try {

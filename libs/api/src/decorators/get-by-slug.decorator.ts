@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-types */
-import { ApiException, DocumentNotFoundException } from '@app/common'
+import { ApiException, DocumentNotFoundException } from '..'
 import { applyDecorators } from '@nestjs/common/decorators'
 import { NotFoundException } from '@nestjs/common/exceptions'
 import { Type } from '@nestjs/common/interfaces'

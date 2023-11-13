@@ -2,27 +2,34 @@
 import {
 	ApiException,
 	DocumentNotFoundException,
+	DuplicateFieldException,
 	InvalidIdException,
-} from '@app/common'
+} from '..'
 import { applyDecorators } from '@nestjs/common/decorators'
 import {
 	BadRequestException,
 	NotFoundException,
 } from '@nestjs/common/exceptions'
 import { Type } from '@nestjs/common/interfaces'
-import { ApiOkResponse } from '@nestjs/swagger'
+import { ApiCreatedResponse } from '@nestjs/swagger'
 
-interface ApiGetByIdOptions {
+interface ApiPatchOptions {
 	type: Type<unknown> | Function | [Function] | string
 	document: string
+	duplicateFields?: string[]
 }
 
-export const ApiGetById = (options: ApiGetByIdOptions) => {
-	const { document, type } = options
+export const ApiPatch = (options: ApiPatchOptions) => {
+	const { document, type, duplicateFields } = options
+
+	const fields = duplicateFields
+		? duplicateFields.map((f) => DuplicateFieldException(f, document))
+		: []
+
 	return applyDecorators(
-		ApiOkResponse({ type }),
+		ApiCreatedResponse({ type }),
 		ApiException(() => BadRequestException, {
-			description: InvalidIdException(),
+			description: [InvalidIdException(), ...fields],
 		}),
 		ApiException(() => NotFoundException, {
 			description: DocumentNotFoundException(document),

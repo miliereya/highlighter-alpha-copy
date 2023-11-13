@@ -1,4 +1,4 @@
-import { capitalizeAndSingularize } from '../utils'
+import { capitalizeAndSingularize } from '../../../common/src/utils'
 
 export const DuplicateFieldException = (field: string, modelName: string) =>
 	`Duplicate value in field '${field}' in ${capitalizeAndSingularize(

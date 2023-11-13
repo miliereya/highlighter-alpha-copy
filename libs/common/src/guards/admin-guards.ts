@@ -14,8 +14,8 @@ import { catchError, map, Observable, of, tap } from 'rxjs'
 import { ADMIN_MESSAGE_PATTERNS, ADMIN_SERVICE } from '../constants'
 import { AdminData, TypeAdminRole } from '../types'
 import { HasRole } from '../decorators'
-import { ApiAdminJwt } from '..'
 import { ApiTags } from '@nestjs/swagger'
+import { ApiAdminJwt } from '@app/api'
 
 @Injectable()
 class AdminAuthGuard implements CanActivate {

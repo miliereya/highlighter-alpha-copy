@@ -2,7 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { AbstractDocument, MONGO_COLLECTIONS } from '@app/common'
 import { Types } from 'mongoose'
 import { ApiProperty } from '@nestjs/swagger'
-import { USER_EXAMPLE } from '../swagger/api-examples'
+import { USER_EXAMPLE } from '@app/api'
 
 @Schema({ versionKey: false })
 export class User extends AbstractDocument {

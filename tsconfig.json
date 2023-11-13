@@ -29,6 +29,12 @@
       ],
       "@app/api/*": [
         "libs/api/src/*"
+      ],
+      "@app/amazon-s3": [
+        "libs/amazon-s3/src"
+      ],
+      "@app/amazon-s3/*": [
+        "libs/amazon-s3/src/*"
       ]
     }
   }

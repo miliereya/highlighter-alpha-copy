@@ -10,10 +10,7 @@ import {
 } from 'mongoose'
 import { AbstractDocument } from './abstract.schema'
 import { capitalizeAndSingularize } from '../utils'
-import {
-	DocumentNotFoundException,
-	DuplicateFieldException,
-} from '../exceptions'
+import { DocumentNotFoundException, DuplicateFieldException } from '@app/api'
 
 export abstract class AbstractRepository<TDocument extends AbstractDocument> {
 	protected abstract readonly logger: Logger

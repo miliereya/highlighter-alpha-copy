@@ -21,12 +21,12 @@ import {
 	HIGHLIGHT_MESSAGE_PATTERNS,
 	GetHighlightsPreviewsPayload,
 	UserPrivate,
+	HighlightPreview,
 } from '@app/common'
 import { TokenPayload } from './interfaces'
 import { Response } from 'express'
 import { Types } from 'mongoose'
 import { ClientProxy } from '@nestjs/microservices'
-import { HighlightPreview } from '@app/common/types/highlight.types'
 import { lastValueFrom, map } from 'rxjs'
 
 @Injectable()

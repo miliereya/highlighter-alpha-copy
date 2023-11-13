@@ -12,20 +12,22 @@ import { GameService } from './game.service'
 import { CreateGameDto, UpdateGameDto } from './dto'
 import { MessagePattern, Payload } from '@nestjs/microservices'
 import {
-	ApiCreate,
-	ApiDelete,
-	ApiGetById,
-	ApiGetBySlug,
-	ApiPatch,
 	CreatorGuard,
-	GAME_EXAMPLE,
 	GAME_MESSAGE_PATTERNS,
 	Game,
 	RemoveDeletedCategoryPayload,
 	UserPublic,
 } from '@app/common'
 import { ApiTags } from '@nestjs/swagger'
-import { ApiGetAll } from '@app/common/swagger/api-decorators/get-all.api-decorator'
+import {
+	ApiCreate,
+	ApiDelete,
+	ApiGetAll,
+	ApiGetById,
+	ApiGetBySlug,
+	ApiPatch,
+	GAME_EXAMPLE,
+} from '@app/api'
 
 @Controller('games')
 export class GameController {
