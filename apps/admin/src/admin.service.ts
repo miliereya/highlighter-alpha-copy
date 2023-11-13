@@ -6,8 +6,13 @@ import {
 import { AdminRepository } from './admin.repository'
 import * as bcrypt from 'bcryptjs'
 import { Types } from 'mongoose'
-import { AdminData, adminRoles, parseToId } from '@app/common'
-import { moderatorAggregateFields } from './utils'
+import {
+	AdminData,
+	adminFields,
+	adminRoles,
+	getFieldsForAggregate,
+	parseToId,
+} from '@app/common'
 import { Response } from 'express'
 import { RegisterDto } from './dto'
 import { TokenPayload } from './interfaces'
@@ -70,9 +75,7 @@ export class AdminService {
 		return this.adminRepository.aggregateOne([
 			{ $match: { _id: parseToId(_id) } },
 			{
-				$project: {
-					...moderatorAggregateFields(),
-				},
+				$project: getFieldsForAggregate(adminFields),
 			},
 		])
 	}

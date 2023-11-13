@@ -3,6 +3,7 @@ import { HighlightController } from './highlight.controller'
 import { HighlightService } from './highlight.service'
 import {
 	DatabaseModule,
+	HealthModule,
 	Highlight,
 	HighlightSchema,
 	LoggerModule,
@@ -25,7 +26,7 @@ import { HighlightRepository } from './highlight.repository'
 			validationSchema: Joi.object({
 				MONGODB_URI: Joi.string().required(),
 				HTTP_PORT: Joi.number().required(),
-				USER_HOST: Joi.string().required(),
+				RMQ_URI: Joi.string().required(),
 			}),
 		}),
 		ClientsModule.registerAsync([
@@ -35,12 +36,13 @@ import { HighlightRepository } from './highlight.repository'
 					transport: Transport.RMQ,
 					options: {
 						urls: [configService.getOrThrow<string>('RMQ_URI')],
-						queue: 'user',
+						queue: USER_SERVICE,
 					},
 				}),
 				inject: [ConfigService],
 			},
 		]),
+		HealthModule,
 	],
 	controllers: [HighlightController],
 	providers: [HighlightService, HighlightRepository],

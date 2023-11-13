@@ -5,6 +5,10 @@ export interface AddHighlightToUserPayload {
 	userId: Types.ObjectId
 }
 
+export interface GetHighlightsPreviewsPayload {
+	by: Types.ObjectId
+}
+
 export interface LikeHighlightToUserPayload {
 	highlightId: Types.ObjectId | string
 	userId: Types.ObjectId | string

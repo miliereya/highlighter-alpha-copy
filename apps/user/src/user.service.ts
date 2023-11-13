@@ -1,5 +1,6 @@
 import {
 	BadRequestException,
+	Inject,
 	Injectable,
 	UnauthorizedException,
 } from '@nestjs/common'
@@ -11,22 +12,31 @@ import { JwtService } from '@nestjs/jwt'
 import {
 	AddHighlightToUserPayload,
 	parseToId,
-	highlightPreviewLookup,
 	LikeHighlightToUserPayload,
 	UserPublic,
+	UserWithPrivateFields,
+	getFieldsForSelect,
+	userPrivateFields,
+	HIGHLIGHT_SERVICE,
+	HIGHLIGHT_MESSAGE_PATTERNS,
+	GetHighlightsPreviewsPayload,
 	UserPrivate,
 } from '@app/common'
 import { TokenPayload } from './interfaces'
 import { Response } from 'express'
-import { userAggregatePrivateFields, userAggregatePublicFields } from './utils'
 import { Types } from 'mongoose'
+import { ClientProxy } from '@nestjs/microservices'
+import { HighlightPreview } from '@app/common/types/highlight.types'
+import { lastValueFrom, map } from 'rxjs'
 
 @Injectable()
 export class UserService {
 	constructor(
 		private readonly userRepository: UserRepository,
 		private readonly configService: ConfigService,
-		private readonly jwtService: JwtService
+		private readonly jwtService: JwtService,
+		@Inject(HIGHLIGHT_SERVICE)
+		private readonly highlightService: ClientProxy
 	) {}
 
 	async registerUser(dto: RegisterDto) {
@@ -65,32 +75,44 @@ export class UserService {
 	}
 
 	async getPrivateUser(_id: Types.ObjectId) {
-		return this.userRepository.aggregateOne<UserPrivate>([
-			{ $match: { _id: parseToId(_id) } },
-			{
-				$lookup: highlightPreviewLookup(),
-			},
-			{
-				$project: {
-					...userAggregatePrivateFields(),
-				},
-			},
-		])
+		const user =
+			await this.userRepository.findOneAndSelect<UserWithPrivateFields>(
+				{ _id },
+				getFieldsForSelect(userPrivateFields)
+			)
+
+		const highlightsPreview = await lastValueFrom(
+			this.highlightService
+				.send<HighlightPreview[], GetHighlightsPreviewsPayload>(
+					HIGHLIGHT_MESSAGE_PATTERNS.GET_PREVIEWS,
+					{ by: user._id }
+				)
+				.pipe(
+					map((res) => {
+						return res
+					})
+				)
+		)
+
+		const userPrivate: UserPrivate = {
+			...user,
+			highlightsPreview,
+		}
+
+		return userPrivate
 	}
 
 	async getUserById(_id: string) {
-		return this.userRepository.findOne({ _id: parseToId(_id) })
+		const user = await this.userRepository.findOne({ _id: parseToId(_id) })
+		delete user.password
+		return user
 	}
 
 	async getProfile(_id: string) {
 		return this.userRepository.aggregateOne<UserPublic>([
 			{ $match: { _id: parseToId(_id) } },
 			{
-				$lookup: highlightPreviewLookup(),
-			},
-			{
 				$project: {
-					...userAggregatePublicFields(),
 					subscribers: { $size: '$subscribers' },
 					subscribed: { $size: '$subscribed' },
 				},
@@ -103,7 +125,7 @@ export class UserService {
 		const user = await this.userRepository.findOne({ email })
 		const passwordIsValid = await bcrypt.compare(password, user.password)
 		if (!passwordIsValid) {
-			throw new UnauthorizedException('Credentials are not valid.')
+			throw new UnauthorizedException('Credentials are not valid')
 		}
 		return user
 	}

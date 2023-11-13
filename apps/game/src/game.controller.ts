@@ -22,6 +22,7 @@ import {
 	GAME_MESSAGE_PATTERNS,
 	Game,
 	RemoveDeletedCategoryPayload,
+	UserPublic,
 } from '@app/common'
 import { ApiTags } from '@nestjs/swagger'
 import { ApiGetAll } from '@app/common/swagger/api-decorators/get-all.api-decorator'
@@ -53,7 +54,7 @@ export class GameController {
 
 	@Get()
 	@ApiTags('Public')
-	@ApiGetAll({ type: Game })
+	@ApiGetAll({ type: UserPublic })
 	getAll() {
 		return this.gameService.findAll()
 	}

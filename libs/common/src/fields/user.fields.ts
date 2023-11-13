@@ -1,12 +1,7 @@
-export const userPublicFields = [
-	'username',
-	'avatar',
-	'subscribed',
-	'subscribers',
-	'friends',
-] as ['username', 'avatar', 'subscribed', 'subscribers', 'friends']
+export const userPublicFields = ['username'] as ['username']
 
-export const userPrivateFields = [
+export const userCurrentFields = [
+	'_id',
 	'username',
 	'email',
 	'avatar',
@@ -17,6 +12,7 @@ export const userPrivateFields = [
 	'friendRequests',
 	'likedHighlights',
 ] as [
+	'_id',
 	'username',
 	'email',
 	'avatar',
@@ -24,6 +20,29 @@ export const userPrivateFields = [
 	'subscribers',
 	'friends',
 	'highlights',
+	'friendRequests',
+	'likedHighlights',
+]
+
+export const userPrivateFields = [
+	'_id',
+	'username',
+	'email',
+	'avatar',
+	'subscribed',
+	'subscribers',
+	'friends',
+	'friendRequests',
+	'likedHighlights',
+] as [
+	'_id',
+	'username',
+	'email',
+	'avatar',
+	'subscribed',
+	'subscribers',
+	'friends',
+
 	'friendRequests',
 	'likedHighlights',
 ]

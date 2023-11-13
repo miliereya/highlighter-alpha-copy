@@ -6,23 +6,24 @@ import { Logger } from 'nestjs-pino'
 import * as cookieParser from 'cookie-parser'
 import { Transport } from '@nestjs/microservices'
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
+import { USER_SERVICE } from '@app/common'
 
 async function bootstrap() {
 	const app = await NestFactory.create(UserModule)
 	const configService = app.get(ConfigService)
+	app.use(cookieParser())
 	app.connectMicroservice({
 		transport: Transport.RMQ,
 		options: {
 			urls: [configService.getOrThrow('RMQ_URI')],
-			queue: 'user',
+			queue: USER_SERVICE,
 		},
 	})
-	app.use(cookieParser())
 	app.setGlobalPrefix('api/v1')
 	app.useGlobalPipes(new ValidationPipe({ whitelist: true }))
 	app.useLogger(app.get(Logger))
 	const config = new DocumentBuilder()
-		.setTitle('Highlighter Games API')
+		.setTitle('Highlighter User API')
 		.setVersion('1.0')
 		.build()
 	const document = SwaggerModule.createDocument(app, config)

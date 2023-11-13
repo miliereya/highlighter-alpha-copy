@@ -1,7 +1,14 @@
 import { Body, Controller, Param, Post } from '@nestjs/common'
 import { HighlightService } from './highlight.service'
-import { Auth, CurrentUser, UserPrivate } from '@app/common'
+import {
+	Auth,
+	CurrentUser,
+	GetHighlightsPreviewsPayload,
+	HIGHLIGHT_MESSAGE_PATTERNS,
+	UserCurrent,
+} from '@app/common'
 import { CreateHighlightDto } from './dto'
+import { MessagePattern, Payload } from '@nestjs/microservices'
 
 @Controller('highlights')
 export class HighlightController {
@@ -10,7 +17,7 @@ export class HighlightController {
 	@Post('create')
 	@Auth()
 	async create(
-		@CurrentUser() user: UserPrivate,
+		@CurrentUser() user: UserCurrent,
 		@Body() dto: CreateHighlightDto
 	) {
 		return this.highlightService.createHighlight(user, dto)
@@ -18,11 +25,18 @@ export class HighlightController {
 
 	@Post('like/:_id')
 	@Auth()
-	async like(@CurrentUser() user: UserPrivate, @Param('_id') _id: string) {
+	async like(@CurrentUser() user: UserCurrent, @Param('_id') _id: string) {
 		await this.highlightService.likeHighlight({
 			userId: user._id,
 			highlightId: _id,
 			isLiked: !!user.likedHighlights.find((h) => String(h) === _id),
 		})
+	}
+
+	@MessagePattern(HIGHLIGHT_MESSAGE_PATTERNS.GET_PREVIEWS)
+	async getPreviews(@Payload() dto: GetHighlightsPreviewsPayload) {
+		const res = await this.highlightService.getPreviews(dto)
+		console.log(res)
+		return res
 	}
 }

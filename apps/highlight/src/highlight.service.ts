@@ -1,10 +1,13 @@
 import {
 	AddHighlightToUserPayload,
+	GetHighlightsPreviewsPayload,
 	LikeHighlightToUserPayload,
 	TypeLikeAction,
 	USER_MESSAGE_PATTERNS,
 	USER_SERVICE,
-	UserPrivate,
+	UserCurrent,
+	getFieldsForProject,
+	highlightPreviewFields,
 	parseToId,
 } from '@app/common'
 import { Inject, Injectable } from '@nestjs/common'
@@ -12,6 +15,7 @@ import { ClientProxy } from '@nestjs/microservices'
 import { CreateHighlightDto } from './dto'
 import { HighlightRepository } from './highlight.repository'
 import { LikeHighlightDto } from './dto/like-highlight.dto'
+import { HighlightPreview } from '@app/common/types/highlight.types'
 
 @Injectable()
 export class HighlightService {
@@ -20,7 +24,7 @@ export class HighlightService {
 		private readonly highlightRepository: HighlightRepository
 	) {}
 
-	async createHighlight(user: UserPrivate, dto: CreateHighlightDto) {
+	async createHighlight(user: UserCurrent, dto: CreateHighlightDto) {
 		const highlight = await this.highlightRepository.create({
 			...dto,
 			game: parseToId(dto.game),
@@ -33,6 +37,20 @@ export class HighlightService {
 				userId: user._id,
 			}
 		)
+	}
+
+	async getPreviews(dto: GetHighlightsPreviewsPayload) {
+		const highlights =
+			await this.highlightRepository.aggregate<HighlightPreview>([
+				{ $match: { by: dto.by } },
+				{
+					$project: {
+						...getFieldsForProject(highlightPreviewFields),
+						comments: { $size: '$comments' },
+					},
+				},
+			])
+		return highlights
 	}
 
 	async likeHighlight(dto: LikeHighlightDto) {

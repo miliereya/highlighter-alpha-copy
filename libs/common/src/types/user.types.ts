@@ -1,15 +1,19 @@
-import { TimeStampsWithId, _id } from '.'
-import { userPrivateFields, userPublicFields } from '../fields'
+import { ApiProperty, PickType } from '@nestjs/swagger'
+import {
+	userCurrentFields,
+	userPrivateFields,
+	userPublicFields,
+} from '../fields'
 import { User } from '../models'
-import { HighlightPublic } from './highlight.types'
+import { HighlightPreview } from './highlight.types'
 
-type TypeUserPublicFields = (typeof userPublicFields)[number]
-type TypeUserPrivateFields = (typeof userPrivateFields)[number]
+export class UserCurrent extends PickType(User, userCurrentFields) {}
 
-export interface UserPrivate
-	extends Pick<User, TypeUserPrivateFields>,
-		TimeStampsWithId {}
+export class UserPublic extends PickType(User, userPublicFields) {}
 
-export interface UserPublic extends Pick<User, TypeUserPublicFields>, _id {
-	highlights: HighlightPublic[]
+export class UserWithPrivateFields extends PickType(User, userPrivateFields) {}
+
+export class UserPrivate extends PickType(User, userPrivateFields) {
+	@ApiProperty({ type: [HighlightPreview] })
+	highlightsPreview: HighlightPreview[]
 }

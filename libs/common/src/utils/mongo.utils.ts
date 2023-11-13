@@ -10,10 +10,7 @@ export const parseToId = (value: string | number | Types.ObjectId) => {
 	}
 }
 
-export const getFieldsForAggregate = (
-	fields: string[],
-	prefix: string = ''
-) => {
+export const getFieldsForProject = (fields: string[], prefix: string = '') => {
 	if (prefix) prefix = prefix + '.'
 	const fieldsToReturn = {}
 	for (let i = 0; i < fields.length; i++) {
@@ -47,7 +44,7 @@ export const groupFieldsForAggregate = (
 	return fieldsToReturn
 }
 
-export const getFieldsForPopulate = (fields: string[], prefix: string = '') => {
+export const getFieldsForSelect = (fields: string[], prefix: string = '') => {
 	if (prefix) prefix = prefix + '.'
 	return fields
 		.reduce((acc, field) => acc + prefix + field + ' ', '')

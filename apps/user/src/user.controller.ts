@@ -20,11 +20,13 @@ import {
 	LikeHighlightToUserPayload,
 	USER_MESSAGE_PATTERNS,
 	User,
+	UserPrivate,
 } from '@app/common'
 import { Response } from 'express'
 import { JwtAuthGuard } from './guards'
 import { MessagePattern, Payload } from '@nestjs/microservices'
 import { ApiTags } from '@nestjs/swagger'
+import { ApiLogin } from '@app/common/swagger/api-decorators/login.api-decorator'
 
 @Controller('users')
 export class UserController {
@@ -38,6 +40,7 @@ export class UserController {
 	}
 
 	@Post('login')
+	@ApiLogin({ type: UserPrivate })
 	@ApiTags('Public')
 	@HttpCode(200)
 	async login(

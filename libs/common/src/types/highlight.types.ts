@@ -1,9 +1,8 @@
-import { _id } from '.'
+import { PickType } from '@nestjs/swagger'
 import { highlightPreviewFields } from '../fields'
 import { Highlight } from '../models'
 
-type TypeHighlightPreviewFields = (typeof highlightPreviewFields)[number]
-
-export interface HighlightPublic
-	extends Pick<Highlight, TypeHighlightPreviewFields>,
-		_id {}
+export class HighlightPreview extends PickType(
+	Highlight,
+	highlightPreviewFields
+) {}

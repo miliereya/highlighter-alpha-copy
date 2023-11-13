@@ -20,14 +20,11 @@ export abstract class AbstractRepository<TDocument extends AbstractDocument> {
 
 	constructor(protected readonly model: Model<TDocument>) {}
 
-	async aggregate(
+	async aggregate<T>(
 		pipelineStages: PipelineStage[],
-		options: AggregateOptions
-	): Promise<TDocument[]> {
-		const documents = await this.model.aggregate<TDocument>(
-			pipelineStages,
-			options
-		)
+		options?: AggregateOptions
+	): Promise<T[]> {
+		const documents = await this.model.aggregate<T>(pipelineStages, options)
 
 		return documents
 	}
@@ -75,6 +72,26 @@ export abstract class AbstractRepository<TDocument extends AbstractDocument> {
 		fields?: ProjectionType<TDocument>
 	) {
 		const document = await this.model.findOne(filterQuery, fields)
+		if (!document) {
+			throw new NotFoundException(
+				`${capitalizeAndSingularize(
+					this.model.collection.collectionName
+				)} was not found`
+			)
+		}
+
+		return document
+	}
+
+	async findOneAndSelect<T>(
+		filterQuery: FilterQuery<TDocument>,
+		select: string,
+		fields?: ProjectionType<TDocument>
+	) {
+		const document = await this.model
+			.findOne<T>(filterQuery, fields)
+			.select(select)
+			.lean<T>(true)
 		if (!document) {
 			throw new NotFoundException(
 				`${capitalizeAndSingularize(
