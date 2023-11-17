@@ -47,18 +47,6 @@ services:
       - '5003:5003'
     volumes:
       - .:/usr/src/app
-  file:
-    build:
-      context: .
-      dockerfile: ./apps/file/Dockerfile
-      target: development
-    command: npm run dev file
-    env_file:
-      - ./apps/file/.env
-    ports:
-      - '5004:5004'
-    volumes:
-      - .:/usr/src/app
   admin:
     build:
       context: .
