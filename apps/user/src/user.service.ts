@@ -103,9 +103,12 @@ export class UserService {
 	}
 
 	async getUserById(_id: string) {
-		const user = await this.userRepository.findOne({ _id: parseToId(_id) })
-		delete user.password
-		return user
+		return await this.userRepository.findOneAndSelect(
+			{
+				_id: parseToId(_id),
+			},
+			'-password'
+		)
 	}
 
 	async getProfile(_id: string) {
