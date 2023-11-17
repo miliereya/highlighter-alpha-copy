@@ -20,6 +20,11 @@ async function bootstrap() {
 	app.setGlobalPrefix('api/v1')
 	app.useGlobalPipes(new ValidationPipe({ whitelist: true }))
 	app.useLogger(app.get(Logger))
+	app.enableCors({
+		credentials: true,
+		origin:
+			configService.get('CLIENT_ADMIN_URL') ?? 'http://localhost:3010',
+	})
 	await app.startAllMicroservices()
 	await app.listen(configService.get('HTTP_PORT'))
 }
