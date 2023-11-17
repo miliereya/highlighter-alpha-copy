@@ -8,4 +8,5 @@ export const DuplicateFieldException = (field: string, modelName: string) =>
 export const DocumentNotFoundException = (modelName: string) =>
 	`${capitalizeAndSingularize(modelName)} was not found`
 
-export const InvalidIdException = () => 'Invalid id format'
+export const InvalidIdException = (value?: any) =>
+	value ? `Value: '${value}' should be id format` : 'Invalid id format'

@@ -68,7 +68,7 @@ export abstract class AbstractRepository<TDocument extends AbstractDocument> {
 		filterQuery: FilterQuery<TDocument>,
 		fields?: ProjectionType<TDocument>
 	) {
-		const document = await this.model.findOne(filterQuery, fields)
+		const document = await this.model.findOne(filterQuery, fields).lean()
 		if (!document) {
 			throw new NotFoundException(
 				`${capitalizeAndSingularize(

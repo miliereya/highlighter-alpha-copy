@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing'
-import { AmazonS3Service } from './amazon-s3.service'
+import { AmazonS3Service } from '../amazon-s3.service'
 
 describe('AmazonS3Service', () => {
 	let service: AmazonS3Service

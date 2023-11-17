@@ -6,7 +6,7 @@ export const parseToId = (value: string | number | Types.ObjectId) => {
 	try {
 		return new Types.ObjectId(value)
 	} catch (e) {
-		throw new BadRequestException(InvalidIdException())
+		throw new BadRequestException(InvalidIdException(value))
 	}
 }
 

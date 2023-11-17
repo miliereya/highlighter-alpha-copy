@@ -10,9 +10,9 @@ export class Highlight extends AbstractDocument {
 	@Prop()
 	title: string
 
-	@ApiProperty({ type: [String], example: HIGHLIGHT_EXAMPLE.content })
+	@ApiProperty({ type: String, example: HIGHLIGHT_EXAMPLE.filePath })
 	@Prop()
-	content: string[]
+	filePath: string
 
 	@ApiProperty({ type: String, example: HIGHLIGHT_EXAMPLE.by })
 	@Prop({ ref: MONGO_COLLECTIONS.USERS })
