@@ -1,19 +1,9 @@
-import {
-	IsArray,
-	IsNotEmpty,
-	IsString,
-	MaxLength,
-	ArrayMaxSize,
-} from 'class-validator'
+import { IsNotEmpty, IsString, MaxLength } from 'class-validator'
 
 export class CreateHighlightDto {
 	@IsString()
 	@MaxLength(255)
 	title: string
-
-	@IsArray()
-	@ArrayMaxSize(10)
-	content: string[]
 
 	@IsNotEmpty()
 	@IsString()

@@ -16,17 +16,26 @@ import { ClientProxy } from '@nestjs/microservices'
 import { CreateHighlightDto } from './dto'
 import { HighlightRepository } from './highlight.repository'
 import { LikeHighlightDto } from './dto/like-highlight.dto'
+import { AmazonS3Service } from '@app/amazon-s3'
 
 @Injectable()
 export class HighlightService {
 	constructor(
 		@Inject(USER_SERVICE) private readonly userService: ClientProxy,
-		private readonly highlightRepository: HighlightRepository
+		private readonly highlightRepository: HighlightRepository,
+		private readonly amazonS3Service: AmazonS3Service
 	) {}
 
-	async createHighlight(user: UserCurrent, dto: CreateHighlightDto) {
+	async createHighlight(
+		user: UserCurrent,
+		dto: CreateHighlightDto,
+		file: Buffer
+	) {
+		const filePath = `${dto.title}-${new Date().getTime()}`
+		await this.amazonS3Service.upload(filePath, file)
 		const highlight = await this.highlightRepository.create({
 			...dto,
+			filePath,
 			game: parseToId(dto.game),
 			by: parseToId(user._id),
 		})

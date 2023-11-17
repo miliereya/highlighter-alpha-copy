@@ -13,6 +13,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config'
 import * as Joi from 'joi'
 import { ClientsModule, Transport } from '@nestjs/microservices'
 import { HighlightRepository } from './highlight.repository'
+import { AmazonS3Module } from '@app/amazon-s3'
 
 @Module({
 	imports: [
@@ -20,6 +21,7 @@ import { HighlightRepository } from './highlight.repository'
 		DatabaseModule.forFeature([
 			{ name: Highlight.name, schema: HighlightSchema },
 		]),
+		AmazonS3Module,
 		LoggerModule,
 		ConfigModule.forRoot({
 			isGlobal: true,

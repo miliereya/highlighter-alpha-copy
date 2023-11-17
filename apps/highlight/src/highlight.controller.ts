@@ -1,4 +1,13 @@
-import { Body, Controller, Param, Post } from '@nestjs/common'
+import {
+	Body,
+	Controller,
+	Param,
+	ParseFilePipe,
+	Post,
+	UploadedFile,
+	UseInterceptors,
+	ValidationPipe,
+} from '@nestjs/common'
 import { HighlightService } from './highlight.service'
 import {
 	Auth,
@@ -9,6 +18,32 @@ import {
 } from '@app/common'
 import { CreateHighlightDto } from './dto'
 import { MessagePattern, Payload } from '@nestjs/microservices'
+import { FileInterceptor } from '@nestjs/platform-express'
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { Multer } from 'multer'
+
+import { PipeTransform } from '@nestjs/common'
+
+type TParseFormDataJsonOptions = {
+	field: string
+}
+
+export class ParseFormDataJsonPipe implements PipeTransform {
+	constructor(private options?: TParseFormDataJsonOptions) {}
+
+	transform(value: any) {
+		const { field } = this.options
+		const jsonField = value[field].replace(
+			/(\w+:)|(\w+ :)/g,
+			function (matchedStr: string) {
+				return (
+					'"' + matchedStr.substring(0, matchedStr.length - 1) + '":'
+				)
+			}
+		)
+		return JSON.parse(jsonField)
+	}
+}
 
 @Controller('highlights')
 export class HighlightController {
@@ -16,11 +51,19 @@ export class HighlightController {
 
 	@Post('create')
 	@Auth()
+	@UseInterceptors(FileInterceptor('file'))
 	async create(
-		@CurrentUser() user: UserCurrent,
-		@Body() dto: CreateHighlightDto
+		@UploadedFile(new ParseFilePipe({}))
+		file: Express.Multer.File,
+		@Body(
+			new ParseFormDataJsonPipe({ field: 'body' }),
+			new ValidationPipe({ whitelist: true })
+		)
+		dto: CreateHighlightDto,
+		@CurrentUser()
+		user: UserCurrent
 	) {
-		return this.highlightService.createHighlight(user, dto)
+		await this.highlightService.createHighlight(user, dto, file.buffer)
 	}
 
 	@Post('like/:_id')
@@ -35,8 +78,6 @@ export class HighlightController {
 
 	@MessagePattern(HIGHLIGHT_MESSAGE_PATTERNS.GET_PREVIEWS)
 	async getPreviews(@Payload() dto: GetHighlightsPreviewsPayload) {
-		const res = await this.highlightService.getPreviews(dto)
-		console.log(res)
-		return res
+		return await this.highlightService.getPreviews(dto)
 	}
 }
