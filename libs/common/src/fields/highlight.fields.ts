@@ -1,13 +1,14 @@
 export const highlightPreviewFields = [
 	'title',
-	'content',
+	'filePath',
 	'likes',
 	'comments',
-] as ['title', 'content', 'likes', 'comments']
+] as ['title', 'filePath', 'likes', 'comments']
 
 export const highlightPrivateFields = [
 	'username',
 	'email',
+	'filePath',
 	'avatar',
 	'subscribed',
 	'subscribers',
@@ -17,6 +18,7 @@ export const highlightPrivateFields = [
 ] as [
 	'username',
 	'email',
+	'filePath',
 	'avatar',
 	'subscribed',
 	'subscribers',
