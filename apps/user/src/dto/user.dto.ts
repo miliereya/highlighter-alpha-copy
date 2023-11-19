@@ -5,3 +5,9 @@ export class GetUserDto {
 	@IsNotEmpty()
 	_id: string
 }
+
+export class ConfirmEmailDto {
+	@IsString()
+	@IsNotEmpty()
+	token: string
+}

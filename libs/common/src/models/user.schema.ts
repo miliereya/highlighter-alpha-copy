@@ -10,6 +10,9 @@ export class User extends AbstractDocument {
 	@Prop({ unique: true })
 	email: string
 
+	@Prop({ default: false })
+	isEmailConfirmed: boolean
+
 	@ApiProperty({ type: String, example: USER_EXAMPLE.username })
 	@Prop({ unique: true, minlength: 3, maxlength: 24 })
 	username: string

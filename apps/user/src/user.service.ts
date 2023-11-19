@@ -5,7 +5,7 @@ import {
 	UnauthorizedException,
 } from '@nestjs/common'
 import { UserRepository } from './user.repository'
-import { LoginDto, RegisterDto } from './dto'
+import { ConfirmEmailDto, LoginDto, RegisterDto } from './dto'
 import * as bcrypt from 'bcryptjs'
 import { ConfigService } from '@nestjs/config'
 import { JwtService } from '@nestjs/jwt'
@@ -22,8 +22,11 @@ import {
 	GetHighlightsPreviewsPayload,
 	UserPrivate,
 	HighlightPreview,
+	EMAIL_SERVICE,
+	EMAIL_MESSAGE_PATTERNS,
+	SendEmailPayload,
 } from '@app/common'
-import { TokenPayload } from './interfaces'
+import { AuthTokenPayload, VerificationTokenPayload } from './interfaces'
 import { Response } from 'express'
 import { Types } from 'mongoose'
 import { ClientProxy } from '@nestjs/microservices'
@@ -36,7 +39,9 @@ export class UserService {
 		private readonly configService: ConfigService,
 		private readonly jwtService: JwtService,
 		@Inject(HIGHLIGHT_SERVICE)
-		private readonly highlightService: ClientProxy
+		private readonly highlightService: ClientProxy,
+		@Inject(EMAIL_SERVICE)
+		private readonly emailService: ClientProxy
 	) {}
 
 	async registerUser(dto: RegisterDto) {
@@ -48,14 +53,14 @@ export class UserService {
 		})
 
 		delete user.password
-		return user
+		this.sendVerificationLink(user.email)
 	}
 
 	async login(dto: LoginDto, response: Response) {
 		const verifiedUser = await this.verifyUser(dto)
 		const user = await this.getPrivateUser(verifiedUser._id)
 
-		const tokenPayload: TokenPayload = {
+		const tokenPayload: AuthTokenPayload = {
 			_id: verifiedUser._id.toHexString(),
 		}
 
@@ -171,5 +176,63 @@ export class UserService {
 			return
 		}
 		throw new BadRequestException('Username is already used.')
+	}
+
+	sendVerificationLink(email: string) {
+		const payload: VerificationTokenPayload = { email }
+		const token = this.jwtService.sign(payload, {
+			secret: this.configService.get('JWT_VERIFICATION_TOKEN_SECRET'),
+			expiresIn: `${this.configService.get(
+				'JWT_VERIFICATION_TOKEN_EXPIRATION_TIME'
+			)}s`,
+		})
+
+		const url = `${this.configService.get(
+			'EMAIL_CONFIRMATION_URL'
+		)}?token=${token}`
+
+		const text = `Welcome to the highlighter. To confirm the email address, click here: ${url}`
+
+		this.emailService.emit<void, SendEmailPayload>(
+			EMAIL_MESSAGE_PATTERNS.SEND,
+			{
+				to: email,
+				subject: 'Email confirmation',
+				from: 'highlighter.development@gmail.com',
+				text: text,
+			}
+		)
+	}
+
+	async confirmEmail(dto: ConfirmEmailDto) {
+		const email = await this.decodeConfirmationToken(dto.token)
+		const user = await this.userRepository.findOne({ email })
+		if (user.isEmailConfirmed) {
+			throw new BadRequestException('Email already confirmed')
+		}
+		await this.userRepository.findOneAndUpdate(
+			{ email },
+			{ isEmailConfirmed: true }
+		)
+	}
+
+	private async decodeConfirmationToken(token: string) {
+		try {
+			const payload = await this.jwtService.verify(token, {
+				secret: this.configService.get('JWT_VERIFICATION_TOKEN_SECRET'),
+			})
+
+			if (typeof payload === 'object' && 'email' in payload) {
+				return payload.email
+			}
+			throw new BadRequestException()
+		} catch (error) {
+			if (error?.name === 'TokenExpiredError') {
+				throw new BadRequestException(
+					'Email confirmation token expired'
+				)
+			}
+			throw new BadRequestException('Bad confirmation token')
+		}
 	}
 }

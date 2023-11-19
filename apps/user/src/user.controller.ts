@@ -9,7 +9,7 @@ import {
 	UseGuards,
 } from '@nestjs/common'
 import { UserService } from './user.service'
-import { LoginDto, RegisterDto } from './dto'
+import { ConfirmEmailDto, LoginDto, RegisterDto } from './dto'
 import {
 	AddHighlightToUserPayload,
 	AuthPayload,
@@ -65,6 +65,12 @@ export class UserController {
 	@ApiGetById({ document: User.name, type: String })
 	async profile(@Param('_id') _id: string) {
 		return this.userService.getProfile(_id)
+	}
+
+	@HttpCode(200)
+	@Post('confirm-email')
+	async confirm(@Body() dto: ConfirmEmailDto) {
+		await this.userService.confirmEmail(dto)
 	}
 
 	@UseGuards(JwtAuthGuard)

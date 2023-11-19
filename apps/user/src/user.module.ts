@@ -3,6 +3,7 @@ import { UserController } from './user.controller'
 import { UserService } from './user.service'
 import {
 	DatabaseModule,
+	EMAIL_SERVICE,
 	HIGHLIGHT_SERVICE,
 	HealthModule,
 	LoggerModule,
@@ -30,6 +31,9 @@ import { ClientsModule, Transport } from '@nestjs/microservices'
 				JWT_SECRET: Joi.string().required(),
 				JWT_EXPIRATION: Joi.string().required(),
 				HTTP_PORT: Joi.number().required(),
+				JWT_VERIFICATION_TOKEN_SECRET: Joi.string().required(),
+				JWT_VERIFICATION_TOKEN_EXPIRATION_TIME: Joi.string().required(),
+				EMAIL_CONFIRMATION_URL: Joi.string().required(),
 			}),
 		}),
 		ClientsModule.registerAsync([
@@ -40,6 +44,17 @@ import { ClientsModule, Transport } from '@nestjs/microservices'
 					options: {
 						urls: [configService.getOrThrow<string>('RMQ_URI')],
 						queue: HIGHLIGHT_SERVICE,
+					},
+				}),
+				inject: [ConfigService],
+			},
+			{
+				name: EMAIL_SERVICE,
+				useFactory: (configService: ConfigService) => ({
+					transport: Transport.RMQ,
+					options: {
+						urls: [configService.getOrThrow<string>('RMQ_URI')],
+						queue: EMAIL_SERVICE,
 					},
 				}),
 				inject: [ConfigService],
