@@ -47,6 +47,18 @@ services:
       - '5003:5003'
     volumes:
       - .:/usr/src/app
+  email:
+    build:
+      context: .
+      dockerfile: ./apps/email/Dockerfile
+      target: development
+    command: npm run dev email
+    env_file:
+      - ./apps/email/.env
+    ports:
+      - '5004:5004'
+    volumes:
+      - .:/usr/src/app
   admin:
     build:
       context: .

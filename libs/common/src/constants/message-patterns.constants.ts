@@ -20,3 +20,7 @@ export const enum CATEGORY_MESSAGE_PATTERNS {
 export const enum GAME_MESSAGE_PATTERNS {
 	REMOVE_DELETED_CATEGORY = 'remove_deleted_category',
 }
+
+export const enum EMAIL_MESSAGE_PATTERNS {
+	SEND = 'send',
+}
