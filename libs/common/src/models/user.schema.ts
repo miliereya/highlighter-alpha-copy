@@ -24,21 +24,27 @@ export class User extends AbstractDocument {
 	@Prop({ default: '' })
 	avatar: string
 
+	@ApiProperty({ type: [String], example: USER_EXAMPLE.highlights })
 	@Prop({ ref: MONGO_COLLECTIONS.HIGHLIGHTS, default: [] })
 	highlights: Types.ObjectId[]
 
+	@ApiProperty({ type: String, example: USER_EXAMPLE.likedHighlights })
 	@Prop({ ref: MONGO_COLLECTIONS.HIGHLIGHTS, default: [] })
 	likedHighlights: Types.ObjectId[]
 
+	@ApiProperty({ type: String, example: USER_EXAMPLE.subscribers })
 	@Prop({ ref: MONGO_COLLECTIONS.USERS, default: [] })
 	subscribers: Types.ObjectId[]
 
+	@ApiProperty({ type: String, example: USER_EXAMPLE.subscribed })
 	@Prop({ ref: MONGO_COLLECTIONS.USERS, default: [] })
 	subscribed: Types.ObjectId[]
 
+	@ApiProperty({ type: String, example: USER_EXAMPLE.friends })
 	@Prop({ ref: MONGO_COLLECTIONS.USERS, default: [] })
 	friends: Types.ObjectId[]
 
+	@ApiProperty({ type: String, example: USER_EXAMPLE.friendRequests })
 	@Prop({ ref: MONGO_COLLECTIONS.USERS, default: [] })
 	friendRequests: Types.ObjectId[]
 }

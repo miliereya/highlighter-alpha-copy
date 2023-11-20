@@ -25,12 +25,26 @@ async function bootstrap() {
 	const config = new DocumentBuilder()
 		.setTitle('Highlighter User API')
 		.setVersion('1.0')
+		.addCookieAuth(
+			'Authentication',
+			{
+				type: 'apiKey',
+				name: 'Authentication',
+				in: 'cookie',
+			},
+			'Authentication'
+		)
 		.build()
 	const document = SwaggerModule.createDocument(app, config)
-	SwaggerModule.setup('api', app, document)
+	SwaggerModule.setup('api', app, document, {
+		swaggerOptions: {
+			persistAuthorization: true,
+			withCredentials: true,
+			tagsSorter: 'alpha',
+		},
+	})
 	app.enableCors({
 		credentials: true,
-		origin: configService.get('CLIENT_WEB_URL') ?? 'http://localhost:3000',
 	})
 	await app.startAllMicroservices()
 	await app.listen(configService.get('HTTP_PORT'))

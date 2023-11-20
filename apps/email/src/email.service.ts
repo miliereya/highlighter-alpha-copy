@@ -14,9 +14,6 @@ export class EmailService {
 	}
 
 	async send(mail: MailDataRequired) {
-		const clientResponse = await this.mailService.send(mail)
-		console.log(mail)
-		console.log(clientResponse)
-		return clientResponse
+		return await this.mailService.send(mail)
 	}
 }

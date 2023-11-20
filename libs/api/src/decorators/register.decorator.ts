@@ -2,7 +2,7 @@
 import { applyDecorators } from '@nestjs/common/decorators'
 import { BadRequestException } from '@nestjs/common/exceptions'
 import { Type } from '@nestjs/common/interfaces'
-import { ApiCreatedResponse } from '@nestjs/swagger'
+import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger'
 import { ApiException } from '../exceptions'
 
 interface ApiRegisterOptions {
@@ -14,6 +14,7 @@ export const ApiRegister = (
 ) => {
 	const { type } = options
 	return applyDecorators(
+		ApiTags('Authentication'),
 		ApiCreatedResponse({ type }),
 		ApiException(() => BadRequestException, {
 			description: [

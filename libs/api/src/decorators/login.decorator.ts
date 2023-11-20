@@ -2,7 +2,7 @@
 import { applyDecorators } from '@nestjs/common/decorators'
 import { UnauthorizedException } from '@nestjs/common/exceptions'
 import { Type } from '@nestjs/common/interfaces'
-import { ApiOkResponse } from '@nestjs/swagger'
+import { ApiOkResponse, ApiTags } from '@nestjs/swagger'
 import { ApiException } from '../exceptions'
 
 interface ApiLoginOptions {
@@ -12,6 +12,7 @@ interface ApiLoginOptions {
 export const ApiLogin = (options: ApiLoginOptions = { type: undefined }) => {
 	const { type } = options
 	return applyDecorators(
+		ApiTags('Authentication'),
 		ApiOkResponse({ type }),
 		ApiException(() => UnauthorizedException, {
 			description: ['Credentials are not valid'],

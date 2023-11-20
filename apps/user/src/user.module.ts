@@ -13,10 +13,10 @@ import {
 import { ConfigModule, ConfigService } from '@nestjs/config'
 import * as Joi from 'joi'
 import { UserRepository } from './user.repository'
-import { JwtStrategy } from './strategies/jwt.strategy'
-import { JwtModule } from '@nestjs/jwt'
-import { LocalStrategy } from './strategies/local.strategy'
 import { ClientsModule, Transport } from '@nestjs/microservices'
+import { AuthService } from './auth/auth.service'
+import { AuthModule } from './auth/auth.module'
+import { JwtService } from '@nestjs/jwt'
 
 @Module({
 	imports: [
@@ -60,18 +60,10 @@ import { ClientsModule, Transport } from '@nestjs/microservices'
 				inject: [ConfigService],
 			},
 		]),
-		JwtModule.registerAsync({
-			useFactory: (configService: ConfigService) => ({
-				secret: configService.get<string>('JWT_SECRET'),
-				signOptions: {
-					expiresIn: `${configService.get('JWT_EXPIRATION')}s`,
-				},
-			}),
-			inject: [ConfigService],
-		}),
 		HealthModule,
+		AuthModule,
 	],
 	controllers: [UserController],
-	providers: [UserService, UserRepository, LocalStrategy, JwtStrategy],
+	providers: [UserService, AuthService, UserRepository, JwtService],
 })
 export class UserModule {}

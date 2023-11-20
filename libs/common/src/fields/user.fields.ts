@@ -1,4 +1,6 @@
-export const userPublicFields = ['username'] as ['username']
+export const userProfileFields = ['_id', 'username'] as ['_id', 'username']
+
+export const userPreviewFields = ['email', 'username'] as ['email', 'username']
 
 export const userCurrentFields = [
 	'_id',
@@ -29,6 +31,7 @@ export const userPrivateFields = [
 	'username',
 	'email',
 	'avatar',
+	'highlights',
 	'subscribed',
 	'subscribers',
 	'friends',
@@ -39,10 +42,10 @@ export const userPrivateFields = [
 	'username',
 	'email',
 	'avatar',
+	'highlights',
 	'subscribed',
 	'subscribers',
 	'friends',
-
 	'friendRequests',
 	'likedHighlights',
 ]

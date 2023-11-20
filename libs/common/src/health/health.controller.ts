@@ -1,10 +1,10 @@
 import { Controller, Get } from '@nestjs/common'
-import { ApiTags } from '@nestjs/swagger'
+import { ApiExcludeEndpoint } from '@nestjs/swagger'
 
 @Controller('/')
 export class HealthController {
 	@Get()
-	@ApiTags('Health check')
+	@ApiExcludeEndpoint()
 	health() {
 		return true
 	}
