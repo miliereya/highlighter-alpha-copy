@@ -45,6 +45,7 @@ async function bootstrap() {
 	})
 	app.enableCors({
 		credentials: true,
+		origin: configService.get('CLIENT_WEB_URL') ?? 'http://localhost:3000',
 	})
 	await app.startAllMicroservices()
 	await app.listen(configService.get('HTTP_PORT'))
