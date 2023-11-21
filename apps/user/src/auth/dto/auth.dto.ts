@@ -52,3 +52,8 @@ export class RegisterDto {
 	})
 	password: string
 }
+
+export class UserPreviewDto {
+	@IsEmail()
+	email: string
+}

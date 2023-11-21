@@ -1,8 +1,11 @@
 export const enum USER_MESSAGE_PATTERNS {
-	AUTHENTICATE = 'authenticate',
 	ADD_HIGHLIGHT = 'add_highlight',
 	REMOVE_HIGHLIGHT = 'remove_highlight',
 	LIKE_HIGHLIGHT = 'like_highlight',
+}
+
+export const enum AUTH_MESSAGE_PATTERNS {
+	AUTHENTICATE = 'authenticate',
 }
 
 export const enum ADMIN_MESSAGE_PATTERNS {

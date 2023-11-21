@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common'
 import { ClientProxy } from '@nestjs/microservices'
 import { catchError, map, Observable, of, tap } from 'rxjs'
-import { USER_MESSAGE_PATTERNS, USER_SERVICE } from '../constants'
+import { AUTH_MESSAGE_PATTERNS, USER_SERVICE } from '../constants'
 import { ApiJwt } from '@app/api'
 
 @Injectable()
@@ -30,7 +30,7 @@ class JwtAuthGuard implements CanActivate {
 			return false
 		}
 		return this.authClient
-			.send(USER_MESSAGE_PATTERNS.AUTHENTICATE, {
+			.send(AUTH_MESSAGE_PATTERNS.AUTHENTICATE, {
 				Authentication: jwt,
 			})
 			.pipe(

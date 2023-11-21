@@ -16,7 +16,6 @@ import {
 	GAME_MESSAGE_PATTERNS,
 	Game,
 	RemoveDeletedCategoryPayload,
-	UserPublic,
 } from '@app/common'
 import { ApiTags } from '@nestjs/swagger'
 import {
@@ -24,7 +23,7 @@ import {
 	ApiDelete,
 	ApiGetAll,
 	ApiGetById,
-	ApiGetBySlug,
+	ApiGetOne,
 	ApiPatch,
 	GAME_EXAMPLE,
 } from '@app/api'
@@ -49,14 +48,19 @@ export class GameController {
 
 	@Get('/by-slug/:slug')
 	@ApiTags('Public')
-	@ApiGetBySlug({ type: Game, document: Game.name, slug: GAME_EXAMPLE.slug })
+	@ApiGetOne({
+		type: Game,
+		document: Game.name,
+		example: GAME_EXAMPLE.slug,
+		name: 'slug',
+	})
 	getBySlug(@Param('slug') slug: string) {
 		return this.gameService.bySlug(slug)
 	}
 
 	@Get()
 	@ApiTags('Public')
-	@ApiGetAll({ type: UserPublic })
+	@ApiGetAll({ type: Game })
 	getAll() {
 		return this.gameService.findAll()
 	}
