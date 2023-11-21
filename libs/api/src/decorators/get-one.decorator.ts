@@ -5,19 +5,20 @@ import { NotFoundException } from '@nestjs/common/exceptions'
 import { Type } from '@nestjs/common/interfaces'
 import { ApiOkResponse, ApiParam } from '@nestjs/swagger'
 
-interface ApiGetBySlugOptions {
+interface ApiGetOneOptions {
 	type: Type<unknown> | Function | [Function] | string
 	document: string
-	slug: string
+	example: string
+	name: string
 }
 
-export const ApiGetBySlug = (options: ApiGetBySlugOptions) => {
-	const { document, type, slug } = options
+export const ApiGetOne = (options: ApiGetOneOptions) => {
+	const { document, type, name, example } = options
 	return applyDecorators(
 		ApiOkResponse({ type }),
 		ApiException(() => NotFoundException, {
 			description: DocumentNotFoundException(document),
 		}),
-		ApiParam({ name: 'slug', required: true, example: slug })
+		ApiParam({ name, required: true, example })
 	)
 }

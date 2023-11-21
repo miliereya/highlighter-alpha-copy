@@ -15,6 +15,8 @@ import {
 	SendEmailPayload,
 	parseToId,
 	UserPreview,
+	getFieldsForSelect,
+	userPreviewFields,
 } from '@app/common'
 import { AuthTokenPayload, VerificationTokenPayload } from './interfaces'
 import { Response } from 'express'
@@ -33,7 +35,7 @@ export class AuthService {
 		private readonly emailService: ClientProxy
 	) {}
 
-	async register(dto: RegisterDto): Promise<UserPreview> {
+	async register(dto: RegisterDto) {
 		await this.checkEmailAvailability(dto.email)
 		await this.checkUsernameAvailability(dto.username)
 		const user = await this.userRepository.create({
@@ -42,10 +44,6 @@ export class AuthService {
 		})
 
 		this.sendVerificationLink(user.email)
-		return {
-			username: user.username,
-			email: user.email,
-		}
 	}
 
 	async login(dto: LoginDto, response: Response) {
@@ -62,6 +60,13 @@ export class AuthService {
 		await this.generateToken(userId, response)
 
 		return user
+	}
+
+	async getUserPreview(email: string) {
+		return await this.userRepository.findOneAndSelect<UserPreview>(
+			{ email, isEmailConfirmed: false },
+			getFieldsForSelect(userPreviewFields) + '-_id'
+		)
 	}
 
 	async verifyUser(dto: LoginDto) {
