@@ -65,7 +65,7 @@ export class AuthService {
 	async getUserPreview(email: string) {
 		return await this.userRepository.findOneAndSelect<UserPreview>(
 			{ email, isEmailConfirmed: false },
-			getFieldsForSelect(userPreviewFields) + '-_id'
+			getFieldsForSelect([...userPreviewFields]) + ' -_id'
 		)
 	}
 
