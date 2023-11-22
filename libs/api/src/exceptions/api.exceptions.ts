@@ -22,7 +22,7 @@ export const ApiException = <T extends HttpException>(
 		for (let i = 0; i < description.length; i++) {
 			const de = description[i]
 			apiResponseOptions.content[
-				Array.isArray(de) ? `[${de.join(' ')}]` : de
+				Array.isArray(de) ? `["${de.join('", "')}"]` : de
 			] = {
 				schema: {
 					type: 'object',
