@@ -67,8 +67,8 @@ export class AuthController {
 		@CurrentUser() user: User,
 		@Res({ passthrough: true }) response: Response
 	) {
-		const jwt = await this.authService.refresh(user._id, response)
-		response.send(jwt)
+		const userData = await this.authService.refresh(user._id, response)
+		response.send(userData)
 	}
 
 	@ApiTags('Email Confirmation')
@@ -90,8 +90,12 @@ export class AuthController {
 	@ApiConfirmEmail()
 	@HttpCode(200)
 	@Post('confirm-email')
-	async confirmEmail(@Body() dto: ConfirmEmailDto) {
-		await this.authService.confirmEmail(dto)
+	async confirmEmail(
+		@Body() dto: ConfirmEmailDto,
+		@Res({ passthrough: true }) response: Response
+	) {
+		await this.authService.confirmEmail(dto, response)
+		response.send()
 	}
 
 	@ApiTags('Email Confirmation')

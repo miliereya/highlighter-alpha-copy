@@ -154,7 +154,7 @@ export class AuthService {
 		)
 	}
 
-	async confirmEmail(dto: ConfirmEmailDto) {
+	async confirmEmail(dto: ConfirmEmailDto, response: Response) {
 		const email = await this.decodeConfirmationToken(dto.token)
 		const user = await this.userRepository.findOne({ email })
 		if (user.isEmailConfirmed) {
@@ -164,6 +164,7 @@ export class AuthService {
 			{ email },
 			{ isEmailConfirmed: true }
 		)
+		await this.generateToken(user._id, response)
 	}
 
 	async resendConfirmationLink(email: string) {
