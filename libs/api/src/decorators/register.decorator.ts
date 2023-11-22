@@ -20,6 +20,7 @@ export const ApiRegister = (
 			description: [
 				'Email is already used.',
 				'Username is already used.',
+				['Email is already used.', 'Username is already used.'],
 			],
 		})
 	)

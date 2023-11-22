@@ -36,8 +36,22 @@ export class AuthService {
 	) {}
 
 	async register(dto: RegisterDto) {
-		await this.checkEmailAvailability(dto.email)
-		await this.checkUsernameAvailability(dto.username)
+		const isEmailAvailable = await this.checkEmailAvailability(dto.email)
+		const isUsernameAvailable = await this.checkUsernameAvailability(
+			dto.username
+		)
+
+		if (!isEmailAvailable && !isUsernameAvailable) {
+			throw new BadRequestException([
+				'Email is already used.',
+				'Username is already used.',
+			])
+		} else if (!isEmailAvailable) {
+			throw new BadRequestException('Email is already used.')
+		} else if (!isUsernameAvailable) {
+			throw new BadRequestException('Username is already used.')
+		}
+
 		const user = await this.userRepository.create({
 			...dto,
 			password: await bcrypt.hash(dto.password, 10),
@@ -103,9 +117,9 @@ export class AuthService {
 				email,
 			})
 		} catch (err) {
-			return
+			return true
 		}
-		throw new BadRequestException('Email is already used.')
+		return false
 	}
 
 	private async checkUsernameAvailability(username: string) {
@@ -114,9 +128,9 @@ export class AuthService {
 				username,
 			})
 		} catch (err) {
-			return
+			return true
 		}
-		throw new BadRequestException('Username is already used.')
+		return false
 	}
 
 	async getUserById(_id: string) {

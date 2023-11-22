@@ -3,7 +3,7 @@ import { ApiResponse, ApiResponseOptions } from '@nestjs/swagger'
 export type Func = () => void
 
 export interface ApiExceptionOptions {
-	description: string | string[]
+	description: string | (string | string[])[]
 }
 
 export const ApiException = <T extends HttpException>(
@@ -21,7 +21,9 @@ export const ApiException = <T extends HttpException>(
 	if (Array.isArray(description)) {
 		for (let i = 0; i < description.length; i++) {
 			const de = description[i]
-			apiResponseOptions.content[de] = {
+			apiResponseOptions.content[
+				Array.isArray(de) ? `[${de.join(' ')}]` : de
+			] = {
 				schema: {
 					type: 'object',
 					properties: {
