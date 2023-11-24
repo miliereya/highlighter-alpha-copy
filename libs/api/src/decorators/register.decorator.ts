@@ -16,7 +16,7 @@ export const ApiRegister = (
 	return applyDecorators(
 		ApiTags('Authentication'),
 		ApiCreatedResponse({ type }),
-		ApiException(() => BadRequestException, {
+		...ApiException(() => BadRequestException, {
 			description: [
 				'Email is already used.',
 				'Username is already used.',

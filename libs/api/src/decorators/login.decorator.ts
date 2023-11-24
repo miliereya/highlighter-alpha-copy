@@ -14,8 +14,8 @@ export const ApiLogin = (options: ApiLoginOptions = { type: undefined }) => {
 	return applyDecorators(
 		ApiTags('Authentication'),
 		ApiOkResponse({ type }),
-		ApiException(() => UnauthorizedException, {
-			description: ['Credentials are not valid'],
+		...ApiException(() => UnauthorizedException, {	
+			description: 'Credentials are not valid',
 		})
 	)
 }

@@ -7,7 +7,7 @@ import { ApiOkResponse } from '@nestjs/swagger'
 export const ApiResendEmail = () => {
 	return applyDecorators(
 		ApiOkResponse(),
-		ApiException(() => BadRequestException, {
+		...ApiException(() => BadRequestException, {
 			description: ['Email already confirmed'],
 		})
 	)

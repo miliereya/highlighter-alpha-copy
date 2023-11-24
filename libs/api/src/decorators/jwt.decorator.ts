@@ -7,7 +7,7 @@ import { ApiCookieAuth } from '@nestjs/swagger'
 export const ApiJwt = () => {
 	return applyDecorators(
 		ApiCookieAuth('Authentication'),
-		ApiException(() => UnauthorizedException, {
+		...ApiException(() => UnauthorizedException, {
 			description: 'Unauthorized',
 		})
 	)

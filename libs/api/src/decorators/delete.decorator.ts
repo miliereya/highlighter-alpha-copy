@@ -17,10 +17,10 @@ export const ApiDelete = (options: ApiDeleteOptions) => {
 	const { type, document } = options
 	return applyDecorators(
 		ApiOkResponse({ type }),
-		ApiException(() => NotFoundException, {
+		...ApiException(() => NotFoundException, {
 			description: DocumentNotFoundException(document),
 		}),
-		ApiException(() => BadRequestException, {
+		...ApiException(() => BadRequestException, {
 			description: InvalidIdException(),
 		})
 	)

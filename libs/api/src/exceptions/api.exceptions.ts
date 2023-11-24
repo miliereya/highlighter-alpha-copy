@@ -9,21 +9,20 @@ export interface ApiExceptionOptions {
 export const ApiException = <T extends HttpException>(
 	exception: () => Type<T>,
 	options: ApiExceptionOptions
-): MethodDecorator & ClassDecorator => {
+): (MethodDecorator & ClassDecorator)[] => {
 	const instance = new (exception())()
 	const description = options.description
 
-	const apiResponseOptions: ApiResponseOptions = {
-		status: instance.getStatus(),
-		content: {},
-	}
-
 	if (Array.isArray(description)) {
+		const res: ApiResponseOptions[] = []
 		for (let i = 0; i < description.length; i++) {
 			const de = description[i]
-			apiResponseOptions.content[
-				Array.isArray(de) ? `["${de.join('", "')}"]` : de
-			] = {
+			const apiResponseOptions: ApiResponseOptions = {
+				status: `${instance.getStatus()} (${i + 1})` as any,
+				content: {},
+				isArray: true,
+			}
+			apiResponseOptions.content['application/json'] = {
 				schema: {
 					type: 'object',
 					properties: {
@@ -32,7 +31,7 @@ export const ApiException = <T extends HttpException>(
 							example: instance.getStatus(),
 						},
 						message: {
-							type: 'string',
+							type: Array.isArray(de) ? 'array' : 'string',
 							example: de,
 						},
 						error: {
@@ -43,8 +42,14 @@ export const ApiException = <T extends HttpException>(
 					required: ['statusCode', 'message'],
 				},
 			}
+			res.push(apiResponseOptions)
 		}
+		return res.map((r) => ApiResponse(r))
 	} else {
+		const apiResponseOptions: ApiResponseOptions = {
+			status: instance.getStatus(),
+			content: {},
+		}
 		apiResponseOptions.content[description] = {
 			schema: {
 				type: 'object',
@@ -65,6 +70,6 @@ export const ApiException = <T extends HttpException>(
 				required: ['statusCode', 'message'],
 			},
 		}
+		return [ApiResponse(apiResponseOptions)]
 	}
-	return ApiResponse(apiResponseOptions)
 }

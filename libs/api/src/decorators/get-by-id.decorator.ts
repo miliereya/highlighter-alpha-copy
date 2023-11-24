@@ -17,10 +17,10 @@ export const ApiGetById = (options: ApiGetByIdOptions) => {
 	const { document, type } = options
 	return applyDecorators(
 		ApiOkResponse({ type }),
-		ApiException(() => BadRequestException, {
+		...ApiException(() => BadRequestException, {
 			description: InvalidIdException(),
 		}),
-		ApiException(() => NotFoundException, {
+		...ApiException(() => NotFoundException, {
 			description: DocumentNotFoundException(document),
 		})
 	)

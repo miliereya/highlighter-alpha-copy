@@ -28,10 +28,10 @@ export const ApiPatch = (options: ApiPatchOptions) => {
 
 	return applyDecorators(
 		ApiCreatedResponse({ type }),
-		ApiException(() => BadRequestException, {
+		...ApiException(() => BadRequestException, {
 			description: [InvalidIdException(), ...fields],
 		}),
-		ApiException(() => NotFoundException, {
+		...ApiException(() => NotFoundException, {
 			description: DocumentNotFoundException(document),
 		})
 	)

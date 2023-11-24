@@ -16,7 +16,7 @@ export const ApiGetOne = (options: ApiGetOneOptions) => {
 	const { document, type, name, example } = options
 	return applyDecorators(
 		ApiOkResponse({ type }),
-		ApiException(() => NotFoundException, {
+		...ApiException(() => NotFoundException, {
 			description: DocumentNotFoundException(document),
 		}),
 		ApiParam({ name, required: true, example })

@@ -5,7 +5,7 @@ import { ForbiddenException } from '@nestjs/common/exceptions'
 
 export const ApiAdminJwt = () => {
 	return applyDecorators(
-		ApiException(() => ForbiddenException, {
+		...ApiException(() => ForbiddenException, {
 			description: 'Forbidden resource',
 		})
 	)
