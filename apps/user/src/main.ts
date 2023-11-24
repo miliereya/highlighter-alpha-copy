@@ -36,6 +36,7 @@ async function bootstrap() {
 		},
 	})
 	app.enableCors({
+		exposedHeaders: ['Bearer'],
 		credentials: true,
 		origin: configService.get('CLIENT_WEB_URL') ?? 'http://localhost:3000',
 	})
