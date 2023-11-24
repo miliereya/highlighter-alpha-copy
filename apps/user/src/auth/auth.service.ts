@@ -105,10 +105,7 @@ export class AuthService {
 
 		const token = this.jwtService.sign(tokenPayload)
 
-		response.cookie('Authentication', token, {
-			httpOnly: true,
-			expires,
-		})
+		response.header('Bearer', token)
 	}
 
 	private async checkEmailAvailability(email: string) {
