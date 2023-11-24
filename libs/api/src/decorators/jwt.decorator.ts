@@ -2,11 +2,11 @@
 import { applyDecorators } from '@nestjs/common/decorators'
 import { UnauthorizedException } from '@nestjs/common/exceptions'
 import { ApiException } from '..'
-import { ApiCookieAuth } from '@nestjs/swagger'
+import { ApiBearerAuth } from '@nestjs/swagger'
 
 export const ApiJwt = () => {
 	return applyDecorators(
-		ApiCookieAuth('Authentication'),
+		ApiBearerAuth(),
 		...ApiException(() => UnauthorizedException, {
 			description: 'Unauthorized',
 		})

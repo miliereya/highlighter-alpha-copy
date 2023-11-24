@@ -25,15 +25,7 @@ async function bootstrap() {
 	const config = new DocumentBuilder()
 		.setTitle('Highlighter User API')
 		.setVersion('1.0')
-		.addCookieAuth(
-			'Authentication',
-			{
-				type: 'apiKey',
-				name: 'Authentication',
-				in: 'cookie',
-			},
-			'Authentication'
-		)
+		.addBearerAuth()
 		.build()
 	const document = SwaggerModule.createDocument(app, config)
 	SwaggerModule.setup('api', app, document, {
