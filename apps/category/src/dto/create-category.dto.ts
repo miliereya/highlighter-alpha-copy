@@ -9,14 +9,6 @@ export class CreateCategoryDto {
 	title: string
 
 	@ApiProperty({
-		type: String,
-		example: CATEGORY_EXAMPLE.description,
-	})
-	@IsString()
-	@IsNotEmpty()
-	description: string
-
-	@ApiProperty({
 		type: [String],
 		example: CATEGORY_EXAMPLE.games,
 	})

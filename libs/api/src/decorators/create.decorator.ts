@@ -14,12 +14,14 @@ interface ApiCreateOptions {
 export const ApiCreate = (options: ApiCreateOptions) => {
 	const { document, type, duplicateFields } = options
 	if (duplicateFields) {
-		ApiCreatedResponse({ type }), duplicateFields
-		ApiException(() => BadRequestException, {
-			description: duplicateFields.map((f) =>
-				DuplicateFieldException(f, document)
-			),
-		})
+		return applyDecorators(
+			ApiCreatedResponse({ type }),
+			...ApiException(() => BadRequestException, {
+				description: duplicateFields.map((f) =>
+					DuplicateFieldException(f, document)
+				),
+			})
+		)
 	} else {
 		return applyDecorators(ApiCreatedResponse({ type }))
 	}

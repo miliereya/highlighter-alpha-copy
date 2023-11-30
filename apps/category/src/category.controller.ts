@@ -5,6 +5,7 @@ import {
 	Get,
 	HttpCode,
 	Param,
+	Patch,
 	Post,
 } from '@nestjs/common'
 import { CategoryService } from './category.service'
@@ -13,10 +14,12 @@ import { MessagePattern, Payload } from '@nestjs/microservices'
 import {
 	CATEGORY_MESSAGE_PATTERNS,
 	Category,
+	CreatorGuard,
 	RemoveDeletedGamePayload,
 } from '@app/common'
 import { ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger'
-import { CATEGORY_EXAMPLE } from '@app/api'
+import { ApiGetAll, CATEGORY_EXAMPLE } from '@app/api'
+import { CategoryPublic } from '@app/common/types/category.types'
 
 @ApiTags('Categories')
 @Controller('categories')
@@ -30,7 +33,7 @@ export class CategoryController {
 	}
 
 	@Get()
-	@ApiOkResponse({ type: [Category] })
+	@ApiGetAll({ type: CategoryPublic })
 	getAll() {
 		return this.categoryService.findAll()
 	}
@@ -42,12 +45,14 @@ export class CategoryController {
 		return this.categoryService.bySlug(slug)
 	}
 
+	@CreatorGuard()
 	@Post('create')
 	create(@Body() createCategoryDto: CreateCategoryDto) {
 		return this.categoryService.create(createCategoryDto)
 	}
 
-	@Post(':_id')
+	@CreatorGuard()
+	@Patch(':_id')
 	@ApiOkResponse({ type: Category })
 	@HttpCode(200)
 	update(
@@ -57,6 +62,7 @@ export class CategoryController {
 		return this.categoryService.update(_id, updateCategoryDto)
 	}
 
+	@CreatorGuard()
 	@Delete(':_id')
 	async delete(@Param('_id') _id: string) {
 		await this.categoryService.delete(_id)

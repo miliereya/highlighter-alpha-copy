@@ -22,12 +22,20 @@ async function bootstrap() {
 	app.useGlobalPipes(new ValidationPipe({ whitelist: true }))
 	app.useLogger(app.get(Logger))
 	const config = new DocumentBuilder()
-		.setTitle('Highlighter Categories')
+		.setTitle('Highlighter Categories API')
 		.setVersion('1.0')
+		.addBearerAuth()
 		.build()
 	const document = SwaggerModule.createDocument(app, config)
-	SwaggerModule.setup('api', app, document)
+	SwaggerModule.setup('api', app, document, {
+		swaggerOptions: {
+			persistAuthorization: true,
+			withCredentials: true,
+			tagsSorter: 'alpha',
+		},
+	})
 	app.enableCors({
+		exposedHeaders: ['Bearer'],
 		credentials: true,
 		origin: configService.get('CLIENT_WEB_URL') ?? 'http://localhost:3000',
 	})

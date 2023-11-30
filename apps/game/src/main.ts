@@ -3,7 +3,7 @@ import { GameModule } from './game.module'
 import { ConfigService } from '@nestjs/config'
 import { Transport } from '@nestjs/microservices'
 import * as cookieParser from 'cookie-parser'
-import { ValidationPipe } from '@nestjs/common/pipes'
+// import { ValidationPipe } from '@nestjs/common/pipes'
 import { Logger } from 'nestjs-pino'
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
 
@@ -19,7 +19,7 @@ async function bootstrap() {
 	})
 	app.setGlobalPrefix('api/v1')
 	app.use(cookieParser())
-	app.useGlobalPipes(new ValidationPipe({ whitelist: true }))
+	// app.useGlobalPipes(new ValidationPipe({ whitelist: true }))
 	app.useLogger(app.get(Logger))
 	const config = new DocumentBuilder()
 		.setTitle('Highlighter Games API')

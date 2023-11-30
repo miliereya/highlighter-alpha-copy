@@ -3,6 +3,7 @@ import { CategoryService } from './category.service'
 import { CategoryController } from './category.controller'
 import { CategoryRepository } from './category.repository'
 import {
+	ADMIN_SERVICE,
 	Category,
 	CategorySchema,
 	DatabaseModule,
@@ -37,6 +38,17 @@ import { ClientsModule, Transport } from '@nestjs/microservices'
 					options: {
 						urls: [configService.getOrThrow<string>('RMQ_URI')],
 						queue: configService.getOrThrow<string>('GAME_HOST'),
+					},
+				}),
+				inject: [ConfigService],
+			},
+			{
+				name: ADMIN_SERVICE,
+				useFactory: (configService: ConfigService) => ({
+					transport: Transport.RMQ,
+					options: {
+						urls: [configService.getOrThrow<string>('RMQ_URI')],
+						queue: 'admin',
 					},
 				}),
 				inject: [ConfigService],

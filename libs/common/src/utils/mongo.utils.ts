@@ -2,9 +2,15 @@ import { InvalidIdException } from '@app/api'
 import { BadRequestException } from '@nestjs/common/exceptions'
 import { Types } from 'mongoose'
 
-export const parseToId = (value: string | number | Types.ObjectId) => {
+type TypeParseToIdValue = string | number | Types.ObjectId
+
+export const parseToId = <T>(
+	value: TypeParseToIdValue | TypeParseToIdValue[]
+) => {
 	try {
-		return new Types.ObjectId(value)
+		return Array.isArray(value)
+			? (value.map((v) => new Types.ObjectId(v)) as T)
+			: (new Types.ObjectId(value) as T)
 	} catch (e) {
 		throw new BadRequestException(InvalidIdException(value))
 	}

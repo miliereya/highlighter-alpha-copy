@@ -7,14 +7,20 @@ import {
 	Delete,
 	HttpCode,
 	Patch,
+	UseInterceptors,
+	ParseFilePipe,
+	UploadedFile,
+	ValidationPipe,
 } from '@nestjs/common'
 import { GameService } from './game.service'
 import { CreateGameDto, UpdateGameDto } from './dto'
 import { MessagePattern, Payload } from '@nestjs/microservices'
 import {
+	AddCategoryToGamesPayload,
 	CreatorGuard,
 	GAME_MESSAGE_PATTERNS,
 	Game,
+	ParseFormDataJsonPipe,
 	RemoveDeletedCategoryPayload,
 } from '@app/common'
 import { ApiTags } from '@nestjs/swagger'
@@ -27,6 +33,9 @@ import {
 	ApiPatch,
 	GAME_EXAMPLE,
 } from '@app/api'
+import { FileInterceptor } from '@nestjs/platform-express'
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { Multer } from 'multer'
 
 @Controller('games')
 export class GameController {
@@ -35,8 +44,17 @@ export class GameController {
 	@Post('create')
 	@CreatorGuard()
 	@ApiCreate({ document: Game.name, type: Game, duplicateFields: ['title'] })
-	create(@Body() createGameDto: CreateGameDto) {
-		return this.gameService.create(createGameDto)
+	@UseInterceptors(FileInterceptor('file'))
+	create(
+		@UploadedFile(new ParseFilePipe({}))
+		file: Express.Multer.File,
+		@Body(
+			new ParseFormDataJsonPipe({ field: 'body' }),
+			new ValidationPipe({ whitelist: true })
+		)
+		createGameDto: CreateGameDto
+	) {
+		return this.gameService.create(file.buffer, createGameDto)
 	}
 
 	@Get(':_id')
@@ -78,6 +96,11 @@ export class GameController {
 	@ApiDelete({ document: Game.name })
 	delete(@Param('_id') _id: string) {
 		this.gameService.delete(_id)
+	}
+
+	@MessagePattern(GAME_MESSAGE_PATTERNS.ADD_CATEGORY_TO_GAMES)
+	async addCategoryToGames(@Payload() dto: AddCategoryToGamesPayload) {
+		await this.gameService.addCategoryToGames(dto)
 	}
 
 	@MessagePattern(GAME_MESSAGE_PATTERNS.REMOVE_DELETED_CATEGORY)

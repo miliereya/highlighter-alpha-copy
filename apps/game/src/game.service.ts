@@ -2,6 +2,7 @@ import { Inject, Injectable } from '@nestjs/common'
 import { CreateGameDto, UpdateGameDto } from './dto'
 import { GameRepository } from './game.repository'
 import {
+	AddCategoryToGamesPayload,
 	CATEGORY_MESSAGE_PATTERNS,
 	CATEGORY_SERVICE,
 	RemoveDeletedCategoryPayload,
@@ -10,20 +11,29 @@ import {
 	toSlug,
 } from '@app/common'
 import { ClientProxy } from '@nestjs/microservices'
+import { AmazonS3Service } from '@app/amazon-s3'
 
 @Injectable()
 export class GameService {
 	constructor(
 		private readonly gameRepository: GameRepository,
+		private readonly amazonS3Service: AmazonS3Service,
 		@Inject(CATEGORY_SERVICE) private readonly categoryService: ClientProxy
 	) {}
 
-	async create(dto: CreateGameDto) {
-		return await this.gameRepository.create({
+	async create(file: Buffer, dto: CreateGameDto) {
+		const slug = toSlug(dto.title)
+		const icon = `${slug}`
+
+		const game = await this.gameRepository.create({
 			...dto,
-			categories: dto.categories.map(parseToId),
-			slug: toSlug(dto.title),
+			icon: icon,
+			categories: parseToId(dto.categories),
+			slug,
 		})
+		await this.amazonS3Service.upload(icon, file)
+
+		return game
 	}
 
 	async findAll() {
@@ -46,6 +56,24 @@ export class GameService {
 				categories: dto.categories.map(parseToId),
 				slug: toSlug(dto.title),
 			}
+		)
+	}
+
+	async addCategoryToGames(dto: AddCategoryToGamesPayload) {
+		await this.gameRepository.updateMany(
+			{
+				_id: { $in: parseToId(dto.gameIds) },
+				categories: { $ne: parseToId(dto.categoryId) },
+			},
+			{ $push: { categories: parseToId(dto.categoryId) } }
+		)
+
+		await this.gameRepository.updateMany(
+			{
+				_id: { $nin: parseToId(dto.gameIds) },
+				categories: { $in: parseToId(dto.categoryId) },
+			},
+			{ $pull: { categories: parseToId(dto.categoryId) } }
 		)
 	}
 

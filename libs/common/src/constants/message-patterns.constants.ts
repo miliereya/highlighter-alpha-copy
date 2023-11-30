@@ -21,6 +21,8 @@ export const enum CATEGORY_MESSAGE_PATTERNS {
 }
 
 export const enum GAME_MESSAGE_PATTERNS {
+	GET_GAMES = 'get_games',
+	ADD_CATEGORY_TO_GAMES = 'add_category_to_games',
 	REMOVE_DELETED_CATEGORY = 'remove_deleted_category',
 }
 

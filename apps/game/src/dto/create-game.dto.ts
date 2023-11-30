@@ -17,14 +17,6 @@ export class CreateGameDto {
 	description: string
 
 	@ApiProperty({
-		type: String,
-		example: GAME_EXAMPLE.icon,
-	})
-	@IsString()
-	@IsNotEmpty()
-	icon: string
-
-	@ApiProperty({
 		type: [String],
 		example: GAME_EXAMPLE.categories,
 	})

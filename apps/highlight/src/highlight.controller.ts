@@ -14,6 +14,7 @@ import {
 	CurrentUser,
 	GetHighlightsPreviewsPayload,
 	HIGHLIGHT_MESSAGE_PATTERNS,
+	ParseFormDataJsonPipe,
 	UserCurrent,
 } from '@app/common'
 import { CreateHighlightDto } from './dto'
@@ -21,29 +22,6 @@ import { MessagePattern, Payload } from '@nestjs/microservices'
 import { FileInterceptor } from '@nestjs/platform-express'
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { Multer } from 'multer'
-
-import { PipeTransform } from '@nestjs/common'
-
-type TParseFormDataJsonOptions = {
-	field: string
-}
-
-export class ParseFormDataJsonPipe implements PipeTransform {
-	constructor(private options?: TParseFormDataJsonOptions) {}
-
-	transform(value: any) {
-		const { field } = this.options
-		const jsonField = value[field].replace(
-			/(\w+:)|(\w+ :)/g,
-			function (matchedStr: string) {
-				return (
-					'"' + matchedStr.substring(0, matchedStr.length - 1) + '":'
-				)
-			}
-		)
-		return JSON.parse(jsonField)
-	}
-}
 
 @Controller('highlights')
 export class HighlightController {

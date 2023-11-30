@@ -14,12 +14,6 @@ export class Category extends AbstractDocument {
 	slug: string
 
 	@ApiProperty({
-		type: String,
-	})
-	@Prop()
-	description: string
-
-	@ApiProperty({
 		type: [String],
 	})
 	@Prop({ ref: MONGO_COLLECTIONS.GAMES })

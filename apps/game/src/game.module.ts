@@ -13,6 +13,7 @@ import { GameRepository } from './game.repository'
 import { ConfigModule, ConfigService } from '@nestjs/config'
 import * as Joi from 'joi'
 import { ClientsModule, Transport } from '@nestjs/microservices'
+import { AmazonS3Module } from '@app/amazon-s3'
 
 @Module({
 	imports: [
@@ -52,6 +53,7 @@ import { ClientsModule, Transport } from '@nestjs/microservices'
 				inject: [ConfigService],
 			},
 		]),
+		AmazonS3Module,
 		DatabaseModule,
 		DatabaseModule.forFeature([{ name: Game.name, schema: GameSchema }]),
 		LoggerModule,
